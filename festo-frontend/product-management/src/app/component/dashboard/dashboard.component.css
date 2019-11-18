@@ -1,0 +1,12 @@
+.example-card{
+  padding: 0px;
+  margin-top: 60px;
+}
+p.d-data{
+  text-align: center;
+  font-size: 60px;
+}
+.mat-card-header {
+  background: #125956;
+  color: white;
+}

@@ -1,0 +1,79 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav"
+               [ngClass]="{hidden:!(isHandset) === true}"
+               fixedInViewport="false"
+               [attr.role]="(isHandset) ? 'dialog' : 'navigation'"
+               [mode]="(isHandset) ? 'over' : 'side'"
+               [opened]="(isHandset) === false">
+    <mat-toolbar>Menu</mat-toolbar>
+    <mat-nav-list>
+      <a mat-list-item routerLink="/">Home</a>
+      <a mat-list-item routerLink="/products">Manage products</a>
+      <a mat-list-item [matMenuTriggerFor]="menu">
+        <mat-icon>apps</mat-icon> Applications
+      </a>
+      <mat-menu #menu="matMenu">
+        <div *ngFor="let app of user.appList">
+          <button mat-menu-item (click)="TravelAnother(app.url)">
+            <span>{{app.appName}}</span>
+          </button>
+        </div>
+      </mat-menu>
+      <a mat-list-item *ngIf="user" [matMenuTriggerFor]="usermenu">
+        <mat-icon>person</mat-icon>{{user.user.fullName}}
+      </a>
+      <mat-menu #usermenu="matMenu">
+        <a mat-menu-item>
+          <span>{{user.user.username}}</span>
+        </a>
+        <button mat-menu-item (click)="getLogOut()">
+          <span>Log Out</span>
+        </button>
+      </mat-menu>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary" style="padding:0 40px;">
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="drawer.toggle()"
+        *ngIf="isHandset">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      <a routerLink="/" style="color: white; text-decoration: none"><span>product-management</span></a>
+      <span class="fill-remaining-space"></span>
+      <span class="spacer" [ngClass]="{hidden:!(isHandset) === false}">
+        <button mat-flat-button color="primary" style="padding: 14px;font-size: 18px"
+                (click)="router.navigate(['/'])">Home</button>
+        <button mat-flat-button color="primary" style="padding: 14px;font-size: 18px"
+                (click)="router.navigate(['/products'])">Manage Product</button>
+        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+          <mat-icon>apps</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <div *ngFor="let app of user.appList">
+            <button mat-menu-item (click)="TravelAnother(app.url)">
+              <span>{{app.appName}}</span>
+            </button>
+          </div>
+        </mat-menu>
+
+        <button *ngIf="user.user.fullName" mat-icon-button [matMenuTriggerFor]="usermenu">
+          <mat-icon>person</mat-icon>
+        </button>
+        <mat-menu #usermenu="matMenu">
+          <button mat-menu-item>
+              <span>{{user.user.fullName}}</span>
+          </button>
+          <button mat-menu-item (click)="getLogOut()">
+              <span>Log Out</span>
+          </button>
+        </mat-menu>
+      </span>
+    </mat-toolbar>
+    <!-- Add Content Here -->
+    <ng-content></ng-content>
+  </mat-sidenav-content>
+</mat-sidenav-container>

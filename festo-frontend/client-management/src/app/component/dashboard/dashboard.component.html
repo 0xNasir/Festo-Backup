@@ -1,0 +1,39 @@
+<div class="page-wrapper">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <mat-toolbar color="accent">Branch</mat-toolbar>
+        <mat-card>
+          <mat-card-content align="center">
+            <h1>{{dashboardData.totalBranch}}</h1>
+          </mat-card-content>
+          <mat-card-actions align="end">
+            <button mat-raised-button color="primary" (click)="router.navigate(['browse/branch'])">Browse Branch</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+      <div class="col-md-4">
+        <mat-toolbar color="accent">Contact</mat-toolbar>
+        <mat-card>
+          <mat-card-content align="center">
+            <h1>{{dashboardData.totalContact}}</h1>
+          </mat-card-content>
+          <mat-card-actions align="end">
+            <button mat-raised-button color="primary" (click)="router.navigate(['browse/contact'])">Browse Contact</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+      <div class="col-md-4">
+        <mat-toolbar color="accent">Client</mat-toolbar>
+        <mat-card>
+          <mat-card-content align="center">
+            <h1>{{dashboardData.totalCompany}}</h1>
+          </mat-card-content>
+          <mat-card-actions align="end">
+            <button mat-raised-button color="primary" (click)="router.navigate(['client'])">Browse client</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

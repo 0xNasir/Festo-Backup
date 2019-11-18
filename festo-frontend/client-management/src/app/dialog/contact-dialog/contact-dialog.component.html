@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>Contact information</h1>
+<div mat-dialog-content>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Phone</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let contact of data">
+      <th scope="row">{{contact.personId}}</th>
+      <td>{{contact.personName}}</td>
+      <td>{{contact.personEmail}}</td>
+      <td>{{contact.personNumber}}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>

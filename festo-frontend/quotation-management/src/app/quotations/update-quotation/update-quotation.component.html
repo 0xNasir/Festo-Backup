@@ -1,0 +1,462 @@
+<div id="add_quotation_form_page">
+  <mat-toolbar color="primary">
+    <button mat-flat-button color="primary" (click)="location.back()">
+      <mat-icon>keyboard_arrow_left</mat-icon>
+    </button>
+    Update quotation
+  </mat-toolbar>
+
+  <mat-card>
+    <form class="example-form" [formGroup]="updateQuotationForm">
+      <mat-accordion class="example-headers-align">
+        <mat-expansion-panel [disabled]="true" [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Quotation Information
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <div class="row" id="add_quotation_form_row">
+            <div class="col-md-6">
+              <div class="input-group">
+                <mat-form-field class="date">
+                  <input matInput [matDatepicker]="picker" placeholder="Choose a date" formControlName="date">
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="input-group">
+                <mat-form-field class="quota_no">
+                  <input matInput placeholder="Quotation Number" formControlName="quotaNo">
+                  <mat-error>Field is required</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <h3 style="padding: 8px 25px;margin: 5px -24px;background: #607D8B;color: white;">Company Information</h3>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="input-group">
+                <mat-form-field class="company_name">
+                  <input matInput placeholder="Company Name" [matAutocomplete]="cName" formControlName="companyName"
+                         (input)="pickCompany(updateQuotationForm.value.companyName)" (focus)="pickCompany('')" required>
+                  <mat-autocomplete #cName="matAutocomplete">
+                    <mat-option *ngFor="let client of searchClient" [value]="client.companyName"
+                                (onSelectionChange)="selectClient(client)">
+                      <span>{{client.companyName}}</span>
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error>Field is required</mat-error>
+                </mat-form-field>
+                <span *ngIf="showAddCompanyLink"
+                      style="text-align: center;display: inherit;margin-top: -25px;">
+                  <button type="button" *ngIf="permission.cms.cms_create" mat-icon-button color="accent"><i
+                    class="material-icons" (click)="openCompanyForm()">add</i></button>
+                </span>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="input-group">
+                <mat-form-field class="branch">
+                  <input matInput placeholder="Branch Name" [matAutocomplete]="branchComplete"
+                         formControlName="branchName" (input)="pickBranch(updateQuotationForm.value.branchName)">
+                  <mat-autocomplete #branchComplete="matAutocomplete">
+                    <mat-option *ngFor="let branch of filteredBranch" [value]="branch.branchName"
+                                (onSelectionChange)="selectBranch(branch)">
+                      <span>{{branch.branchName}}</span>
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error>Field is required</mat-error>
+                </mat-form-field>
+                <span *ngIf="showAddBranchLink"
+                      style="text-align: center;display: inherit;margin-top: -25px;">
+                  <button type="button" *ngIf="permission.cms.cms_create" mat-icon-button color="accent"><i
+                    class="material-icons" (click)="openBranchForm()">add</i></button>
+                </span>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="input-group">
+                <mat-form-field class="branchAddress">
+                  <input matInput placeholder="Branch Adress" formControlName="branchAddress">
+
+                  <mat-error>Field is required</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+
+            <div class="col-md-6">
+              <div class="input-group">
+                <mat-form-field class="contact_person">
+                  <input matInput placeholder="Contact Person" [matAutocomplete]="contactComplete"
+                         formControlName="contactPerson" (input)="pickContact(updateQuotationForm.value.contactPerson)">
+                  <mat-autocomplete #contactComplete="matAutocomplete">
+                    <mat-option *ngFor="let name of filteredContact" [value]="name.personName"
+                                (onSelectionChange)="selectPerson(name)">
+                      <span>{{name.personName}}</span>
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error>Field is required</mat-error>
+                </mat-form-field>
+                <span *ngIf="showAddPersonLink"
+                      style="text-align: center;display: inherit;margin-top: -25px;">
+              <button *ngIf="permission.cms.cms_create" type="button" mat-icon-button color="accent"><i
+                class="material-icons" (click)="openContactForm()">add</i></button>
+            </span>
+              </div>
+            </div>
+
+
+            <div class="col-md-6">
+              <div class="input-group">
+                <mat-form-field class="designation">
+                  <input matInput placeholder="Designation" formControlName="designation">
+                  <mat-error>Field is required</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+
+            <div class="col-md-6">
+              <div class="input-group">
+                <mat-form-field>
+                  <mat-label>Status</mat-label>
+                  <mat-select formControlName="status">
+                    <mat-option *ngFor="let p of quotaStatus" [value]="p.value">
+                      {{ p.value }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error>Please! select a status</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="input-group">
+                <mat-form-field class="contact_by">
+                  <input [matAutocomplete]="contactByComplete" matInput placeholder="Contact By"
+                         formControlName="contactBy" (input)="filterContactBy($event.target.value)">
+                  <mat-autocomplete #contactByComplete="matAutocomplete">
+                    <mat-option *ngFor="let user of allUser" [value]="user.name" (onSelectionChange)="selectContactBy(user)">
+                      <span>{{user.name}}</span>
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error>Field is required</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="input-group">
+                <mat-form-field class="contact_by_designation">
+                  <input matInput placeholder="Contact By Designation"
+                         formControlName="contactByDesignation">
+                  <mat-error>Field is required</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="input-group">
+                <mat-form-field class="contact_by_phone">
+                  <input matInput placeholder="Contact By Phone"
+                         formControlName="contactByPhone">
+                  <mat-error>Field is required</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="input-group">
+                <mat-form-field class="remarks">
+                  <input matInput placeholder="Remarks" formControlName="remarks">
+                  <mat-error>Field is required</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+
+          <mat-action-row>
+            <button type="button" mat-button
+                    [disabled]="! updateQuotationForm.value.contactBy || ! updateQuotationForm.value.status||! updateQuotationForm.value.designation ||! updateQuotationForm.value.contactPerson || ! updateQuotationForm.value.branchAddress ||! updateQuotationForm.value.branchName || ! updateQuotationForm.value.companyName||! updateQuotationForm.value.quotaNo || ! updateQuotationForm.value.date"
+                    color="primary" (click)="saveQuotation()">Update and Continue
+            </button>
+          </mat-action-row>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel [disabled]="true" [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Product Information
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <div formArrayName="productList" id="singleProduct"
+               *ngFor="let product of updateQuotationForm.get('productList')['controls']; let i=index">
+            <div [formGroupName]="i">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="input-group">
+                    <mat-form-field class="product-name">
+                      <input matInput #thisStatus placeholder="Product Name" [matAutocomplete]="pName"
+                             aria-label="State"
+                             formControlName="productName" (focus)="focusStatus(i)" (input)="pickProduct(product.value.productName)">
+                      <mat-autocomplete #pName="matAutocomplete">
+                        <mat-option *ngFor="let prdt of SearchProduct" [value]="prdt.productName"
+                                    (onSelectionChange)="selectProduct(prdt, i, product.value.productQty)">
+                          <span>{{prdt.productName}}</span>
+                        </mat-option>
+                      </mat-autocomplete>
+                      <mat-error>Field is required</mat-error>
+                    </mat-form-field>
+                    <span *ngIf="showAddProductLink1 && activeProductLink==i"
+                          style="text-align: center;display: inherit;margin-top: -25px;">
+                    <button *ngIf="permission.pms.pms_create" type="button" mat-icon-button color="accent"
+                            (click)="openProductForm()"><i class="material-icons">add</i></button>
+                  </span>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="input-group">
+                    <mat-form-field class="part-number">
+                      <input matInput placeholder="Part No" [matAutocomplete]="part" aria-label="State"
+                             formControlName="productPartNumber"
+                             (input)="pickProductByPart(product.value.productPartNumber)" (focus)="focusStatus(i)">
+                      <mat-autocomplete #part="matAutocomplete">
+                        <mat-option *ngFor="let prdt of SearchProduct" [value]="prdt.productPartNumber"
+                                    (onSelectionChange)="selectProduct(prdt, i, product.value.productQty)">
+                          <span>{{prdt.productPartNumber}}</span>
+                        </mat-option>
+                      </mat-autocomplete>
+                      <mat-error>Field is required</mat-error>
+                    </mat-form-field>
+                    <span *ngIf="showAddProductLink2 && activeProductLink==i"
+                          style="text-align: center;display: inherit;margin-top: -25px;">
+                    <button *ngIf="permission.pms.pms_create" type="button" mat-icon-button color="accent"
+                            (click)="openProductForm()"><i class="material-icons">add</i></button>
+                </span>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="input-group">
+                    <mat-form-field class="type">
+                      <input matInput placeholder="Product Type" [matAutocomplete]="type" aria-label="type"
+                             formControlName="productType"
+                             (input)="pickType(product.value.productType)" (focus)="focusStatus(i)">
+                      <mat-autocomplete #type="matAutocomplete">
+                        <mat-option *ngFor="let type of SearchProduct" [value]="type.productType"
+                                    (onSelectionChange)="selectProduct(type, i, product.value.productQty)">
+                          <span>{{type.productType}}</span>
+                        </mat-option>
+                      </mat-autocomplete>
+                      <mat-error>Field is required</mat-error>
+                    </mat-form-field>
+                    <span *ngIf="showAddProductLink3 && activeProductLink==i"
+                          style="text-align: center;display: inherit;margin-top: -25px;">
+                      <button *ngIf="permission.pms.pms_create" type="button" mat-icon-button color="accent"
+                              (click)="openProductForm()"><i class="material-icons">add</i></button>
+                    </span>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="input-group">
+                    <mat-form-field class="internal">
+                      <input matInput placeholder="Internal Part Number" formControlName="internalPartNumber">
+                      <mat-error>Field is required</mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="input-group">
+                    <mat-form-field class="qty">
+                      <input matInput type="number" placeholder="Required Quantity" formControlName="productQty">
+                      <mat-error>Field is required</mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="input-group">
+                    <mat-form-field class="qty">
+                      <input matInput type="number" placeholder="Available Quantity" formControlName="productQtyAvailable">
+                      <mat-error>Field is required</mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div [class]="updateQuotationForm.get('productList')['controls'].length>1?'col-11':'col-12'">
+                  <div class="input-group">
+                    <mat-form-field class="remarks">
+                      <textarea matInput placeholder="Description" formControlName="productDescription"></textarea>
+                      <mat-error>Field is required</mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-1" style="padding: 0;" *ngIf="updateQuotationForm.get('productList')['controls'].length>1">
+                  <button mat-icon-button color="warn"
+                          type="button" (click)="removeProductFromProductList(i)"><i class="material-icons">
+                    delete_forever
+                  </i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div align="start">Add new product
+            <button mat-icon-button [disabled]="updateQuotationForm.get('productList').invalid" color="primary" type="button" (click)="addProductToProductList()">
+              <i class="material-icons">
+                add
+              </i>
+            </button>
+          </div>
+          <mat-action-row>
+            <button type="button" mat-button color="warn" (click)="prevStep()">Previous</button>
+            <button type="button" [disabled]="updateQuotationForm.get('productList').invalid" mat-button color="primary" (click)="saveQuotation()">Update and Continue</button>
+          </mat-action-row>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel [disabled]="true" [expanded]="step === 2" (opened)="setStep(2)" hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Pricing and Quantity
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <div formArrayName="productList" class="singleProductForPrice"
+               *ngFor="let product of updateQuotationForm.get('productList')['controls']; let i=index">
+            <div [formGroupName]="i">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="input-group">
+                    <mat-form-field class="product-name">
+                      <input matInput placeholder="Product Name"
+                             formControlName="productName">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="input-group">
+                    <mat-form-field class="part-number">
+                      <input matInput placeholder="Part No"
+                             formControlName="productPartNumber">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="input-group">
+                    <mat-form-field class="price">
+                      <input matInput type="number" placeholder="Unit Price" formControlName="productPrice" (input)="productPriceInputed($event.target.value, i)">
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <mat-action-row>
+            <button type="button" mat-button color="warn" (click)="prevStep()">Previous</button>
+            <button type="button" [disabled]="updateQuotationForm.get('productList').invalid" mat-button color="primary" (click)="saveQuotation()">Update and Continue</button>
+          </mat-action-row>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel [disabled]="true" [expanded]="step === 3" (opened)="setStep(3)" hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Quotation Form information
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+
+          <div formGroupName="generatePdf">
+            <div>
+              <div class="input-group">
+                <mat-form-field class="subject">
+                  <input matInput placeholder="Subject" formControlName="pdfSubject">
+                </mat-form-field>
+              </div>
+            </div>
+            <div>
+              <div class="input-group">
+                <mat-form-field class="body">
+                  <input matInput placeholder="Body" formControlName="pdfBody">
+                </mat-form-field>
+              </div>
+            </div>
+            <div>
+              <div class="input-group">
+                <mat-form-field class="vat">
+                  <input matInput type="number" placeholder="Vat" formControlName="pdfVat">
+                </mat-form-field>
+              </div>
+            </div>
+            <div>
+              <div class="input-group">
+                <mat-form-field class="suggestion">
+                  <input matInput placeholder="Suggestion" formControlName="suggestion">
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <h3 style="padding: 8px 25px;margin: 5px -24px;background: #607D8B;color: white;">Terms and Conditions</h3>
+          <div formArrayName="termsCondition"
+               *ngFor="let terms of updateQuotationForm.get('termsCondition')['controls']; let i=index">
+            <div [formGroupName]="i">
+              <div class="row">
+                <div class="input-group col-md-3">
+                  <mat-form-field class="topic">
+                    <input matInput placeholder="Topic" formControlName="topic" required>
+                  </mat-form-field>
+                </div>
+                <div *ngIf="i==0" [class]="updateQuotationForm.get('termsCondition')['controls'].length>1?'input-group col-md-8 col-11':'input-group col-md-9'">
+                  <mat-form-field class="message">
+                    <input aria-label="msg" matInput placeholder="Message" formControlName="message" [matAutocomplete]="msg" required>
+                    <mat-autocomplete #msg="matAutocomplete">
+                      <mat-option *ngFor="let option of filteredOptions" [value]="option">
+                        {{option}}
+                      </mat-option>
+                    </mat-autocomplete>
+                    <mat-error>Field is required</mat-error>
+                  </mat-form-field>
+                </div>
+                <div *ngIf="i==1" [class]="updateQuotationForm.get('termsCondition')['controls'].length>1?'input-group col-md-8 col-11':'input-group col-md-9'">
+                  <mat-form-field class="message">
+                    <input aria-label="msg2" matInput placeholder="Message" formControlName="message" [matAutocomplete]="msg2" required>
+                    <mat-autocomplete #msg2="matAutocomplete">
+                      <mat-option *ngFor="let option of stadnardDelivery" [value]="option">
+                        {{option}}
+                      </mat-option>
+                    </mat-autocomplete>
+                    <mat-error>Field is required</mat-error>
+                  </mat-form-field>
+                </div>
+                <div *ngIf="i>1" [class]="updateQuotationForm.get('termsCondition')['controls'].length>1?'input-group col-md-8 col-11':'input-group col-md-9'">
+                  <mat-form-field class="message">
+                    <input matInput placeholder="Message" formControlName="message" required>
+                  </mat-form-field>
+                </div>
+                <div *ngIf="updateQuotationForm.get('termsCondition')['controls'].length>1" class="input-group col-md-1 col-1" style="padding: 0;">
+                  <button mat-icon-button color="warn" type="button" (click)="removeTerms(i)">
+                    <i class="material-icons">
+                      delete_forever
+                    </i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div align="start">Add terms & condition
+            <button [disabled]="updateQuotationForm.get('termsCondition').invalid" mat-icon-button color="primary" type="button" (click)="addTerms()">
+              <i class="material-icons">
+                add
+              </i>
+            </button>
+          </div>
+          <mat-action-row>
+            <button mat-button type="button" color="warn" (click)="prevStep()">Previous</button>
+            <button [disabled]="updateQuotationForm.invalid" mat-button color="primary" (click)="saveQuotation()">Save</button>
+          </mat-action-row>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </form>
+  </mat-card>
+</div>

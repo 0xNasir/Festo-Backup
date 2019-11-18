@@ -1,0 +1,25 @@
+.mat-form-field, .example-full-width, .example-form{
+  width: 100%;
+}
+#add_quotation_form_page{
+  width: 50%; margin: 50px auto;
+}
+.singleProductForPrice,div#singleProduct{
+  margin: 20px -24px;
+  padding: 10px 20px;
+  border: 1px solid #D7CFAE;
+  background: #e9eef1;
+}
+.singleProductForPrice:first-child,div#singleProduct:first-child{
+  margin-top: 0px;
+}
+@media only screen and (max-width: 600px) {
+  #add_quotation_form_page{
+    width: 100%; margin: 50px auto;
+  }
+}
+@media only screen and (max-width: 800px) {
+  #add_quotation_form_page{
+    width: 80%; margin: 50px auto;
+  }
+}

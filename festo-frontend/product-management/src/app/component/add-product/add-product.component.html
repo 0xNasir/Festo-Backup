@@ -1,0 +1,105 @@
+<div id="add_product_form_page">
+  <mat-toolbar color="primary">
+    <button matTooltip="Back" mat-flat-button color="primary" (click)="location.back()"><mat-icon>keyboard_arrow_left</mat-icon></button>
+    Add new product
+  </mat-toolbar>
+
+  <mat-card>
+    <form class="add-product-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <h4>Product Information</h4>
+      <div class="row" id="add_quotation_form_row">
+        <div class="col-md-6">
+          <div class="input-group">
+            <mat-form-field class="productName">
+              <input matInput placeholder="Product Name" type="text" formControlName="productName" autofocus required>
+              <mat-error>Field is required</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <mat-form-field class="productPartNo">
+              <input matInput placeholder="Part No." type="text" formControlName="productPartNo" required>
+              <mat-error>Field is required</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <mat-form-field class="productType">
+              <input matInput placeholder="Type" type="text" formControlName="productType" required>
+              <mat-error>Field is required</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group">
+            <mat-form-field class="category">
+              <input matInput placeholder="Category" type="text" formControlName="productCategory" required>
+              <mat-error>Field is required</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="input-group">
+            <mat-form-field class="price">
+              <input matInput placeholder="Unit Price" type="number" formControlName="productPrice" required>
+              <mat-error>Field is required</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="input-group">
+            <mat-form-field class="stock">
+              <input matInput placeholder="In Stock" type="number" formControlName="productInStock" required>
+              <mat-error>Field is required</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="input-group">
+            <mat-form-field class="origin">
+              <input matInput placeholder="Country of origin" type="text" formControlName="productOrigin" required>
+              <mat-error>Field is required</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="input-group">
+            <mat-form-field class="uuq">
+              <input matInput placeholder="Upcoming product" type="number" formControlName="productUuq" required>
+              <mat-error>Field is required</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="input-group">
+            <mat-form-field class="loan">
+              <input matInput placeholder="Lent product" type="number" formControlName="productLoan" required>
+              <mat-error>Field is required</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="input-group">
+            <mat-form-field class="booking">
+              <input matInput placeholder="Booked product" type="number" formControlName="productBooking" required>
+              <mat-error>Field is required</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="input-group">
+            <mat-form-field class="description">
+              <textarea matInput placeholder="Description" formControlName="productDescription" required></textarea>
+              <mat-error>Field is required</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div align="start" style="margin-top: 10px;">
+        <button mat-raised-button color="primary">Save</button>
+      </div>
+    </form>
+  </mat-card>
+</div>

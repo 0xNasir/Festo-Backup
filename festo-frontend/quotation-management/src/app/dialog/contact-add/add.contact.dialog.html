@@ -1,0 +1,43 @@
+<h1 mat-dialog-title>Add a new contact info</h1>
+<div mat-dialog-content>
+  <form class="example-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <h4>Contact Information</h4>
+    <div class="row">
+      <div class="col-md-3">
+        <div class="input-group">
+          <mat-form-field class="personName">
+            <input matInput placeholder="Person Name" formControlName="personName">
+            <mat-error>Field is required</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="input-group">
+          <mat-form-field class="personEmail">
+            <input matInput placeholder="Email" formControlName="personEmail">
+            <mat-error>Field is required</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="input-group">
+          <mat-form-field class="personNumber">
+            <input matInput placeholder="Contact Number" formControlName="personNumber">
+            <mat-error>Field is required</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="input-group">
+          <mat-form-field class="personDesignation">
+            <input matInput placeholder="Designation" formControlName="personDesignation">
+            <mat-error>Field is required</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div mat-dialog-actions align="start">
+      <button mat-raised-button color="primary">Save</button>
+    </div>
+  </form>
+</div>

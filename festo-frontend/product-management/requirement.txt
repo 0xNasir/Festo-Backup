@@ -1,0 +1,9 @@
+npm install --save @angular/material @angular/cdk @angular/animations
+npm install --save hammerjs
+npm install material-design-icons
+npm install normalize.css
+npm install bootstrap
+
+
+Create a navigation menu using the following command:
+ng generate @angular/material:material-nav --name=main-nav

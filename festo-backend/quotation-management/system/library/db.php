@@ -1,0 +1,40 @@
+<?php
+
+class DB {
+	private $adaptor;
+
+	public function __construct($adaptor, $hostname, $username, $password, $database, $port = NULL) {
+		$class = 'DB\\' . $adaptor;
+
+		if (class_exists($class)) {
+			$this->adaptor = new $class($hostname, $username, $password, $database, $port);
+		} else {
+			throw new \Exception('Error: Could not load database adaptor ' . $adaptor . '!');
+		}
+	}
+
+	public function query($sql) {
+		return $this->adaptor->query($sql);
+	}
+
+	public function escape($value) {
+		return $this->adaptor->escape($value);
+	}
+
+	public function countAffected() {
+		return $this->adaptor->countAffected();
+	}
+
+	public function getLastId() {
+		return $this->adaptor->getLastId();
+	}
+
+	public function connected() {
+		return $this->adaptor->connected();
+	}
+	public function lastId($tableName, $columnName, $returnKey="id"){
+        $rst = $this->adaptor->query("SELECT MAX($columnName) AS lastId FROM $tableName");
+        $data["$returnKey"]=$rst->rows[0]['lastId'];
+        return $data;
+    }
+}

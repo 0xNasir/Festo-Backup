@@ -1,0 +1,18 @@
+th.mat-header-cell {
+  width: 14%;
+  min-width: 120px;
+}
+.toolbar-right-content small {
+  margin-left: 10px;
+}
+tr.mat-row.ng-star-inserted:hover {
+  background: #cdd0d3;
+}
+
+.quotation-data mat-toolbar.mat-toolbar.mat-toolbar-single-row {
+  font-size: medium;
+}
+.list-item {
+  margin: 0px 20px 0px 10px;
+}
+@media (max-width:575.98px){.table-responsive-sm{display:block;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.table-responsive-sm>.table-bordered{border:0}}@media (max-width:767.98px){.table-responsive-md{display:block;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.table-responsive-md>.table-bordered{border:0}}@media (max-width:991.98px){.table-responsive-lg{display:block;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.table-responsive-lg>.table-bordered{border:0}}@media (max-width:1199.98px){.table-responsive-xl{display:block;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}.table-responsive-xl>.table-bordered{border:0}}.table-responsive{display:block;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}

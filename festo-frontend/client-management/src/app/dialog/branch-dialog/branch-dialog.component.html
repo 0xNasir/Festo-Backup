@@ -1,0 +1,35 @@
+<h1 mat-dialog-title>Branch information</h1>
+<div mat-dialog-content>
+  <div class="branch-dialog">
+    <div *ngFor="let branch of data" class="single-branch">
+      <mat-toolbar color="accent">
+        <div class="companyInfo">
+          <div class="infoName">Name: {{branch.branchName}}</div>
+          <div class="infoAddr">Address: <small style="background: #ff4081;">{{branch.branchAddress}}</small></div>
+        </div>
+      </mat-toolbar>
+      <mat-card>
+      <div class="contactList">
+        <table class="table table-responsive-lg">
+          <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let contact of branch.contactPerson">
+            <th scope="row">{{contact.personId}}</th>
+            <td>{{contact.personName}}</td>
+            <td>{{contact.personEmail}}</td>
+            <td>{{contact.personNumber}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      </mat-card>
+    </div>
+  </div>
+</div>

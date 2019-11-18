@@ -1,0 +1,16 @@
+.mat-form-field, .example-full-width, .example-form{
+  width: 100%;
+}
+#update_product_form_page{
+  width: 50%; margin: 50px auto;
+}
+@media only screen and (max-width: 600px) {
+  #update_product_form_page{
+    width: 100%; margin: 20px auto;
+  }
+}
+@media only screen and (max-width: 800px) {
+  #update_product_form_page{
+    width: 80%; margin: 50px auto;
+  }
+}

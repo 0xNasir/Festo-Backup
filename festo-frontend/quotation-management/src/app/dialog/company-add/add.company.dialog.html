@@ -1,0 +1,121 @@
+<h1 mat-dialog-title>Add a new company</h1>
+<div mat-dialog-content>
+  <form class="example-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <h4>Company Information</h4>
+    <div class="row" id="add_quotation_form_row">
+      <div class="col-md-12">
+        <div class="input-group">
+          <mat-form-field class="company">
+            <input matInput placeholder="Company Name" formControlName="companyName">
+            <mat-error>Field is required</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+
+    <div formArrayName="branch" *ngFor="let branch of form.get('branch')['controls']; let i=index">
+      <div [formGroupName]="i">
+        <div class="branch-info-header-txt">
+          <div class="row" style="background: #aacccb;">
+            <div class="col-md-10 col-8"><h4 style="margin: 8px 0px;">Branch Information</h4></div>
+            <div class="col-md-2 col-4">
+              <div align="end">
+                <div class="row">
+                  <div class="col-6">
+                    <button mat-mini-fab *ngIf="form.get('branch')['controls'].length==i+1" color="primary" type="button" (click)="makeNewBranch()">
+                      <i class="material-icons">
+                        add
+                      </i>
+                    </button>
+                  </div>
+                  <div class="col-6">
+                    <button mat-mini-fab *ngIf="form.get('branch')['controls'].length>1" color="warn" type="button" (click)="removeBranch(i)"><i class="material-icons">
+                      delete
+                    </i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="input-group">
+              <mat-form-field class="branch_name">
+                <input matInput placeholder="Branch name" formControlName="branchName">
+                <mat-error>Field is required</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group">
+              <mat-form-field class="branch_address">
+                <input matInput placeholder="Branch address" formControlName="branchAddress">
+                <mat-error>Field is required</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div formArrayName="contactPerson" *ngFor="let contact of branch.get('contactPerson')['controls']; let j=index">
+          <div [formGroupName]="j">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="input-group">
+                  <mat-form-field class="personName">
+                    <input matInput placeholder="Person Name" formControlName="personName">
+                    <mat-error>Field is required</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="input-group">
+                  <mat-form-field class="personEmail">
+                    <input matInput placeholder="Email" formControlName="personEmail">
+                    <mat-error>Field is required</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="input-group">
+                  <mat-form-field class="personNumber">
+                    <input matInput placeholder="Contact Number" formControlName="personNumber">
+                    <mat-error>Field is required</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="input-group">
+                  <mat-form-field class="personDesignation">
+                    <input matInput placeholder="Designation" formControlName="personDesignation">
+                    <mat-error>Field is required</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="row" align="end">
+                  <div class="col-6">
+                    <button mat-mini-fab *ngIf="branch.get('contactPerson')['controls'].length==j+1" color="accent" type="button" (click)="makeNewContact(branch)">
+                      <i class="material-icons">
+                        add
+                      </i>
+                    </button>
+                  </div>
+                  <div class="col-6">
+                    <button mat-mini-fab *ngIf="branch.get('contactPerson')['controls'].length>1" type="button" (click)="RemoveContact(branch,j)">
+                      <i class="material-icons">
+                        delete
+                      </i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> <!--Branch form array-->
+    <div mat-dialog-actions align="start">
+      <button mat-raised-button color="primary">Save</button>
+    </div>
+  </form>
+</div>
