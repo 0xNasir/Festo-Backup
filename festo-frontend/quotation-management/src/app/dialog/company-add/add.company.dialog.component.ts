@@ -46,7 +46,7 @@ export class AddCompanyDialogComponent implements OnInit {
     return this.fb.group({
       personId: [null],
       personName: ['', Validators.required],
-      personEmail: ['', Validators.required],
+      personEmail: ['', [Validators.required, Validators.email]],
       personNumber: ['', Validators.required],
       personDesignation: ['', Validators.required]
     });

@@ -40,7 +40,7 @@ export class AuthService {
       catchError(err => {
         if (err.status === 401) {
           console.error('authentication denied!');
-          document.location.href = this.link;
+          document.location.href = Travel.authURL;
         }
         return of(false);
       })

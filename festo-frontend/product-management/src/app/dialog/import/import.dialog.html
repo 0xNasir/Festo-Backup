@@ -1,0 +1,7 @@
+<h1 mat-dialog-title>Import product</h1>
+<div mat-dialog-content>
+  <input type="file" #uploads (change)="onFileChanged(uploads.files)">
+</div>
+<div mat-dialog-actions style="float: right;">
+  <button mat-button style="color: white;background: purple;" (click)="onClose()">Close</button>
+</div>

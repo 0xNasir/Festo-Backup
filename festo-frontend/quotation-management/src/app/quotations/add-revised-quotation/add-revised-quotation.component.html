@@ -176,7 +176,6 @@
               <div class="input-group">
                 <mat-form-field class="remarks">
                   <input matInput placeholder="Quotation Reference" formControlName="quotaRef">
-                  <mat-error>Field is required</mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -268,6 +267,7 @@
                   <div class="input-group">
                     <mat-form-field class="internal">
                       <input matInput placeholder="Internal Part Number" formControlName="internalPartNumber">
+                      <mat-error>Field is required</mat-error>
                     </mat-form-field>
                   </div>
                 </div>
@@ -275,6 +275,8 @@
                   <div class="input-group">
                     <mat-form-field class="qty">
                       <input matInput type="number" placeholder="Quantity Required" formControlName="productQty">
+                      <mat-error *ngIf="product.get('productQty').hasError('required')">Field is required</mat-error>
+                      <mat-error *ngIf="product.get('productQty').hasError('min')">Quantity can't be negative or zero</mat-error>
                     </mat-form-field>
                   </div>
                 </div>
@@ -282,6 +284,8 @@
                   <div class="input-group">
                     <mat-form-field class="qtyavail">
                       <input matInput type="number" placeholder="Quantity Available" formControlName="productQtyAvailable">
+                      <mat-error *ngIf="product.get('productQtyAvailable').hasError('required')">Field is required</mat-error>
+                      <mat-error *ngIf="product.get('productQtyAvailable').hasError('min')">Quantity can't be negative</mat-error>
                     </mat-form-field>
                   </div>
                 </div>
@@ -347,6 +351,8 @@
                   <div class="input-group">
                     <mat-form-field class="price">
                       <input matInput type="number" placeholder="Unit Price" formControlName="productPrice">
+                      <mat-error *ngIf="product.get('productPrice').hasError('required')">Field is required</mat-error>
+                      <mat-error *ngIf="product.get('productPrice').hasError('min')">Price can't be negative</mat-error>
                     </mat-form-field>
                   </div>
                 </div>

@@ -10,22 +10,10 @@ import {Travel} from './travel';
 })
 export class AuthService {
   public static permission: any;
-  link: string;
 
   constructor(public httpClient: HttpClient, public location: Location) {
-    this.getLoginLink();
   }
 
-
-  loginLink(): Observable<any> {
-    return this.httpClient.get(Travel.authURL + '?api=base/link');
-  }
-
-  getLoginLink() {
-    this.loginLink().subscribe(data => {
-      this.link = data['link'];
-    });
-  }
 
   isLoggedIn(): Observable<any> {
     return this.httpClient.get(Travel.productURL + '?api=auth/guard').pipe(
@@ -40,7 +28,7 @@ export class AuthService {
       catchError(err => {
         if (err.status === 401) {
           console.error('authentication denied!');
-          document.location.href = this.link;
+          document.location.href = Travel.authURL;
         }
         return of(false);
       })

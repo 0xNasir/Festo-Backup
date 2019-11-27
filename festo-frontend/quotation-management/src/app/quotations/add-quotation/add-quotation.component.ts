@@ -32,17 +32,17 @@ export class AddQuotationComponent implements OnInit {
   firstCompanySelect: boolean;
   firstBranchSelect: boolean;
   permission: any;
-  setQuotaNo: boolean = false;
+  setQuotaNo = false;
   companyId: string;
   branchId: string;
   quotaNoFirstPart: string;
-  quotaNoSecondPart: string = '---- / ';
-  quotaNoThirdPart: string = '';
-  quotaNoFourthPart: string = '';
+  quotaNoSecondPart = '---- / ';
+  quotaNoThirdPart = '';
+  quotaNoFourthPart = '';
   allChar: string[] = [
     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
   ];
-  firstSubmit: boolean = true;
+  firstSubmit = true;
 
   showAddCompanyLink: boolean;
   showAddBranchLink: boolean;
@@ -73,9 +73,10 @@ export class AddQuotationComponent implements OnInit {
     'to be paid at the time of issuance of the purchase order & the remaining 60% to be paid at the time of delivery.'];
   public stadnardDelivery = ['12-14 weeks after receipt of order confirmation from your end.<br>(Subject ' +
   'to availability on first come first served basis).',
-  'The items shown on the Quality Available column are available & can be delivered immediately after receipt of ' +
-  'order confirmation from your end. (Subject to availability on first come first served basis)<br>Remaining items ' +
-  'can be delivered 12-14 weeks after receipt of order confirmation from your end.'];
+    'The items shown on the Quality Available column are available & can be delivered immediately after receipt of ' +
+    'order confirmation from your end. (Subject to availability on first come first served basis)<br>Remaining items ' +
+    'can be delivered 12-14 weeks after receipt of order confirmation from your end.'];
+  loading: boolean;
 
   constructor(
     private fb: FormBuilder,
@@ -99,6 +100,7 @@ export class AddQuotationComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loading = false;
     this.firstStatusSelection = true;
     this.firstRemarksInput = true;
     this.firstCompanySelect = true;
@@ -209,9 +211,9 @@ export class AddQuotationComponent implements OnInit {
       productPartNumber: ['', Validators.required],
       internalPartNumber: ['', Validators.required],
       productType: ['', Validators.required],
-      productQty: ['', Validators.required],
-      productQtyAvailable: ['', Validators.required],
-      productPrice: ['', Validators.required],
+      productQty: ['', [Validators.required, Validators.min(1), Validators.pattern('^(?=.*\\d)')]],
+      productQtyAvailable: ['', [Validators.required, Validators.min(0)]],
+      productPrice: ['', [Validators.required, Validators.min(0)]],
       productDescription: ['', Validators.required]
     });
   }
@@ -244,7 +246,7 @@ export class AddQuotationComponent implements OnInit {
       const year = date.getFullYear().toString().substr(-2);
       this.quotaNoThirdPart = this.allChar[Number(year) - 1] + this.allChar[month] + ' ' + (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + ' ';
       this.quotaNoFirstPart = 'FSQT / ';
-      this.quotaNoFourthPart = '/ ' + ((Number(data['quotaId']) + 1) < 10 ? '0' + String(Number(data['quotaId']) + 1) : String(Number(data['quotaId']) + 1));
+      this.quotaNoFourthPart = '/ ' + ((Number(data.quotaId) + 1) < 10 ? '0' + String(Number(data.quotaId) + 1) : String(Number(data.quotaId) + 1));
       this.quotationForm.get('quotaNo').setValue(
         this.quotaNoFirstPart + this.quotaNoSecondPart + this.quotaNoThirdPart
       );
@@ -255,17 +257,21 @@ export class AddQuotationComponent implements OnInit {
   }
 
   saveQuotation() {
-    let upDt = this.quotationForm.value;
+    this.loading = true;
+    const upDt = this.quotationForm.value;
     upDt.quotaNo = this.quotationForm.value.quotaNo + this.quotaNoFourthPart;
     upDt.date = Math.trunc(this.quotationForm.value.date.getTime() / 1000);
     this.quotationService.storeQuotations(upDt).subscribe(data => {
-      if (data['injected']) {
-        Traveller.quotationId = data['quotationId'];
+      if (data.injected) {
+        Traveller.quotationId = data.quotationId;
         this.firstSubmit = false;
         this.snackBar.open('Quotation is saved and product is opened', 'Close', {
           duration: 2000,
         });
         this.step++;
+        this.loading = false;
+      } else {
+        this.loading = false;
       }
     });
   }
@@ -296,8 +302,8 @@ export class AddQuotationComponent implements OnInit {
     }
     const cmName = company.companyName.split(' ');
     let quotaCmFormat = '';
-    for (let x = 0; x < cmName.length; x++) {
-      quotaCmFormat = quotaCmFormat + cmName[x][0];
+    for (const cname of cmName) {
+      quotaCmFormat = quotaCmFormat + cname[0];
     }
     this.quotaNoSecondPart = quotaCmFormat + ' / ';
     if (!this.setQuotaNo) {
@@ -346,10 +352,10 @@ export class AddQuotationComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       this.selectClient(result.branch, result);
       this.quotationForm.get('companyName').setValue(result.companyName);
-      this.quotationForm.get('branchName').setValue(result.branch[0]['branchName']);
-      this.quotationForm.get('branchAddress').setValue(result.branch[0]['branchAddress']);
-      this.quotationForm.get('contactPerson').setValue(result.branch[0]['contactPerson'][0]['personName']);
-      this.quotationForm.get('designation').setValue(result.branch[0]['contactPerson'][0]['personDesignation']);
+      this.quotationForm.get('branchName').setValue(result.branch[0].branchName);
+      this.quotationForm.get('branchAddress').setValue(result.branch[0].branchAddress);
+      this.quotationForm.get('contactPerson').setValue(result.branch[0].contactPerson[0].personName);
+      this.quotationForm.get('designation').setValue(result.branch[0].contactPerson[0].personDesignation);
       this.quotationForm.get('branchAddress').enable();
       this.quotationForm.get('contactPerson').enable();
       this.quotationForm.get('designation').enable();
@@ -366,10 +372,10 @@ export class AddQuotationComponent implements OnInit {
       data: this.companyId
     });
     dialogRef.afterClosed().subscribe(result => {
-      this.quotationForm.get('branchName').setValue(result['branchName']);
-      this.quotationForm.get('branchAddress').setValue(result['branchAddress']);
-      this.quotationForm.get('contactPerson').setValue(result['contactPerson'][0]['personName']);
-      this.quotationForm.get('designation').setValue(result['contactPerson'][0]['personDesignation']);
+      this.quotationForm.get('branchName').setValue(result.branchName);
+      this.quotationForm.get('branchAddress').setValue(result.branchAddress);
+      this.quotationForm.get('contactPerson').setValue(result.contactPerson[0].personName);
+      this.quotationForm.get('designation').setValue(result.contactPerson[0].personDesignation);
       this.quotationForm.get('designation').enable();
       this.showAddBranchLink = false;
     });
@@ -396,8 +402,8 @@ export class AddQuotationComponent implements OnInit {
       data: this.branchId
     });
     dialogRef.afterClosed().subscribe(result => {
-      this.quotationForm.get('contactPerson').setValue(result['personName']);
-      this.quotationForm.get('designation').setValue(result['personDesignation']);
+      this.quotationForm.get('contactPerson').setValue(result.personName);
+      this.quotationForm.get('designation').setValue(result.personDesignation);
       this.quotationForm.get('designation').enable();
       this.showAddPersonLink = false;
     });
@@ -437,9 +443,9 @@ export class AddQuotationComponent implements OnInit {
       productPartNumber: [prdt.productPartNumber, Validators.required],
       internalPartNumber: [prdt.productPartNumber, Validators.required],
       productType: [prdt.productType, Validators.required],
-      productQty: [1, Validators.required],
-      productQtyAvailable: [1, Validators.required],
-      productPrice: [prdt.productPrice, Validators.required],
+      productQty: [1, [Validators.required, Validators.min(1)]],
+      productQtyAvailable: [1, [Validators.required, Validators.min(0)]],
+      productPrice: [prdt.productPrice, [Validators.required, Validators.min(0)]],
       productDescription: [prdt.productDescription, Validators.required]
     }));
     this.progressValue = this.progressValue + 25;
@@ -469,13 +475,15 @@ export class AddQuotationComponent implements OnInit {
   }
 
   updtQuotation() {
+    this.loading = true;
     this.quotationForm.value.id = Traveller.quotationId;
     const upDt = this.quotationForm.value;
     upDt.quotaNo = this.quotationForm.value.quotaNo + this.quotaNoFourthPart;
     upDt.date = Math.trunc(this.quotationForm.value.date.getTime() / 1000);
     this.quotationService.updateQuotation(upDt).subscribe(data => {
-      if (data['injected']) {
+      if (data.injected) {
         this.step++;
+        this.loading = false;
         if (this.step > 3) {
           this.snackBar.open('Quotation is successfully created', 'Close', {
             duration: 2000,
@@ -486,14 +494,20 @@ export class AddQuotationComponent implements OnInit {
             duration: 2000,
           });
         }
+      } else {
+        this.loading = false;
       }
     });
   }
 
   QuantityPricing() {
+    this.loading = true;
     this.quotationService.storePricing(this.quotationForm.value, Traveller.quotationId).subscribe(data => {
-      if (data['injected']) {
+      if (data.injected) {
         this.step++;
+        this.loading = false;
+      } else {
+        this.loading = false;
       }
     });
   }

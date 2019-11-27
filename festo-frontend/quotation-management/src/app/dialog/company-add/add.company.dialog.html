@@ -71,7 +71,8 @@
                 <div class="input-group">
                   <mat-form-field class="personEmail">
                     <input matInput placeholder="Email" formControlName="personEmail">
-                    <mat-error>Field is required</mat-error>
+                    <mat-error *ngIf="contact.get('personEmail').hasError('required')">Field is required</mat-error>
+                    <mat-error *ngIf="contact.get('personEmail').hasError('email')">Invalid Email</mat-error>
                   </mat-form-field>
                 </div>
               </div>

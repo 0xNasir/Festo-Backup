@@ -46,7 +46,7 @@ if (isset($_POST)) {
         public function Header()
         {
             // Logo
-            $image_file = 'http://127.0.0.1/quotation-management/?api=pdf/header';
+            $image_file = 'http://127.0.0.1/festo/quotation-management/?api=pdf/header';
             $this->Image($image_file, 0, 0, 210, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
         }
 
@@ -55,7 +55,7 @@ if (isset($_POST)) {
         {
             // Page number
             $this->SetY(0);
-            $image_file = 'http://127.0.0.1/quotation-management/?api=pdf/footer';
+            $image_file = 'http://127.0.0.1/festo/quotation-management/?api=pdf/footer';
             $this->Image($image_file, 0, 280, 210, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
         }
     }

@@ -12,5 +12,16 @@ httpRESTMethod::get(function () {
             'bookedProduct'=>$value['bookedProduct']
         );
     }
+    $sMonthBack=strtotime("-6 months");
+    $sql=$db->query("SELECT * FROM products WHERE productAddedOn <='$sMonthBack'");
+    if ($sql->num_rows){
+        foreach ($sql->rows as $dts){
+            $id=$dts['productId'];
+            $t=$db->query("UPDATE products SET productPrice=0 WHERE productId='$id'");
+            if ($t){
+                continue;
+            }
+        }
+    }
     return $data;
 });

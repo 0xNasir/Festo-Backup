@@ -1,7 +1,7 @@
 import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
 import {QuotationsService} from '../../services/quotations.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MatDialog, MatPaginator, MatSnackBar, MatSort, MatTableDataSource} from '@angular/material';
+import {MatDialog, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {Location} from '@angular/common';
 import {AuthService} from '../../services/auth.service';
 import {History, Quotations} from '../../plain-object/quotations';
@@ -43,8 +43,8 @@ export class ManageHistoryComponent implements OnInit {
       this.id = params.get('id');
       this.quotationService.getSingleQuotation(this.id).subscribe(data => {
         this.quotationObject = data;
-        this.quotaNo = data['quotaNo'];
-        this.historyArray = new MatTableDataSource(data['history']);
+        this.quotaNo = data.quotaNo;
+        this.historyArray = new MatTableDataSource(data.history);
         this.historyArray.paginator = this.paginator;
         this.historyArray.sort = this.sort;
       });

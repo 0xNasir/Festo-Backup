@@ -31,6 +31,7 @@ import {AuthGuard} from './security/auth-guard';
 import { PageNotFoundComponent } from './component/page-not-found/page-not-found.component';
 import { DashboardComponent } from './component/dashboard/dashboard.component';
 import {RevisionDialogComponent} from './dialog/product-revision/revision.dialog.component';
+import {ImportDialogComponent} from './dialog/import/import.dialog.component';
 
 @NgModule({
   declarations: [
@@ -42,11 +43,13 @@ import {RevisionDialogComponent} from './dialog/product-revision/revision.dialog
     ProductDialogComponent,
     PageNotFoundComponent,
     DashboardComponent,
-    RevisionDialogComponent
+    RevisionDialogComponent,
+    ImportDialogComponent
   ],
   entryComponents: [
     ProductDialogComponent,
-    RevisionDialogComponent
+    RevisionDialogComponent,
+    ImportDialogComponent
   ],
   imports: [
     BrowserModule,

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 18, 2019 at 08:22 AM
+-- Generation Time: Nov 27, 2019 at 10:44 AM
 -- Server version: 10.1.36-MariaDB
 -- PHP Version: 7.2.11
 
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `sw_assertive`
+-- Database: `common_sw_assertive`
 --
 
 -- --------------------------------------------------------
@@ -92,7 +92,8 @@ INSERT INTO `access` (`accessId`, `accessAppId`, `keyword`, `definition`, `val`)
 (58, 11, 'pms_stock_out', 'Can stock out', 0),
 (59, 11, 'pms_stock_in', 'Can stock in', 0),
 (60, 11, 'pms_create', 'Can create product', 0),
-(61, 12, 'cms_create', 'Create new Client', 0);
+(61, 12, 'cms_create', 'Create new Client', 0),
+(62, 11, 'pms_import_csv', 'Can import CSV', 0);
 
 -- --------------------------------------------------------
 
@@ -114,9 +115,9 @@ CREATE TABLE `app` (
 --
 
 INSERT INTO `app` (`appId`, `appName`, `url`, `sessAryName`, `remark`, `disabled`) VALUES
-(11, 'Product Management', 'http://127.0.0.1/product-management', 'pms', 'No dependency', 0),
+(11, 'Product Management', 'http://127.0.0.1/festo/product-management', 'pms', 'No dependency', 0),
 (12, 'Client Management', 'http://127.0.0.1/client-management', 'cms', 'No dependancy', 0),
-(13, 'Quotation Management', 'http://127.0.0.1/quotation-management', 'qms', 'Must have client and product', 0),
+(13, 'Quotation Management', 'http://127.0.0.1/festo/quotation-management', 'qms', 'Must have client and product', 0),
 (14, 'Server', 'http://127.0.0.1:4200/', 'srvr', 'This is a running server', 0),
 (15, 'App Shell', 'http://127.0.0.1/swassertive', 'sw', 'jh', 0);
 
@@ -253,9 +254,9 @@ INSERT INTO `permission` (`permissionId`, `permissionLevelId`, `permissionAppId`
 (67, 6, 11, '[{\"keyword\":\"pms_create\",\"val\":true},{\"keyword\":\"pms_read\",\"val\":true},{\"keyword\":\"pms_delete\",\"val\":true}]'),
 (68, 6, 13, '[{\"keyword\":\"qms_create\",\"val\":true},{\"keyword\":\"qms_read\",\"val\":true},{\"keyword\":\"qms_update\",\"val\":true},{\"keyword\":\"qms_pdf\",\"val\":true},{\"keyword\":\"qms_history\",\"val\":true},{\"keyword\":\"qms_history\",\"val\":true},{\"keyword\":\"qms_revise\",\"val\":true},{\"keyword\":\"qms_status\",\"val\":true},{\"keyword\":\"qms_product\",\"val\":true}]'),
 (73, 2, 15, '[]'),
-(74, 2, 11, '[{\"keyword\":\"pms_read\",\"val\":true},{\"keyword\":\"pms_update\",\"val\":true},{\"keyword\":\"pms_delete\",\"val\":true},{\"keyword\":\"pms_generate_csv\",\"val\":true},{\"keyword\":\"pms_price_log\",\"val\":true},{\"keyword\":\"pms_quantity_log\",\"val\":true},{\"keyword\":\"pms_stock_out\",\"val\":true},{\"keyword\":\"pms_stock_in\",\"val\":true},{\"keyword\":\"pms_create\",\"val\":true}]'),
 (75, 2, 12, '[{\"keyword\":\"cms_read\",\"val\":true},{\"keyword\":\"cms_update\",\"val\":true},{\"keyword\":\"cms_delete\",\"val\":true},{\"keyword\":\"cms_branch\",\"val\":true},{\"keyword\":\"cms_create\",\"val\":true}]'),
-(77, 2, 13, '[{\"keyword\":\"qms_create\",\"val\":true},{\"keyword\":\"qms_read\",\"val\":true},{\"keyword\":\"qms_update\",\"val\":true},{\"keyword\":\"qms_delete\",\"val\":true},{\"keyword\":\"qms_pdf\",\"val\":true},{\"keyword\":\"qms_history\",\"val\":true},{\"keyword\":\"qms_history\",\"val\":true},{\"keyword\":\"qms_revise\",\"val\":true},{\"keyword\":\"qms_status\",\"val\":true},{\"keyword\":\"qms_product\",\"val\":true}]');
+(77, 2, 13, '[{\"keyword\":\"qms_create\",\"val\":true},{\"keyword\":\"qms_read\",\"val\":true},{\"keyword\":\"qms_update\",\"val\":true},{\"keyword\":\"qms_delete\",\"val\":true},{\"keyword\":\"qms_pdf\",\"val\":true},{\"keyword\":\"qms_history\",\"val\":true},{\"keyword\":\"qms_history\",\"val\":true},{\"keyword\":\"qms_revise\",\"val\":true},{\"keyword\":\"qms_status\",\"val\":true},{\"keyword\":\"qms_product\",\"val\":true}]'),
+(78, 2, 11, '[{\"keyword\":\"pms_read\",\"val\":true},{\"keyword\":\"pms_update\",\"val\":true},{\"keyword\":\"pms_delete\",\"val\":true},{\"keyword\":\"pms_generate_csv\",\"val\":true},{\"keyword\":\"pms_price_log\",\"val\":true},{\"keyword\":\"pms_quantity_log\",\"val\":true},{\"keyword\":\"pms_stock_out\",\"val\":true},{\"keyword\":\"pms_stock_in\",\"val\":true},{\"keyword\":\"pms_create\",\"val\":true},{\"keyword\":\"pms_import_csv\",\"val\":true}]');
 
 -- --------------------------------------------------------
 
@@ -438,7 +439,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `access`
 --
 ALTER TABLE `access`
-  MODIFY `accessId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `accessId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 
 --
 -- AUTO_INCREMENT for table `app`
@@ -468,7 +469,7 @@ ALTER TABLE `level`
 -- AUTO_INCREMENT for table `permission`
 --
 ALTER TABLE `permission`
-  MODIFY `permissionId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
+  MODIFY `permissionId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
 
 --
 -- AUTO_INCREMENT for table `phone`

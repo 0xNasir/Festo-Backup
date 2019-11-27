@@ -38,4 +38,8 @@ export class ProductService {
   manageStock(data): Observable<any> {
     return this.httpClient.put(Travel.productURL + '?api=base/manage_stock', data);
   }
+
+  importProduct(data): Observable<any> {
+    return this.httpClient.put(Travel.productURL + '?api=base/import', data);
+  }
 }

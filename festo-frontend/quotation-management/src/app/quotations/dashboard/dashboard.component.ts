@@ -21,7 +21,7 @@ export class DashboardComponent implements OnInit {
       this.dashboardObject = data;
     });
     this.dashboardService.getIncompleteData().subscribe(data => {
-      this.incomplete = data['numberOfQuotation'];
+      this.incomplete = data.numberOfQuotation;
     });
   }
 }

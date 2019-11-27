@@ -199,7 +199,8 @@
           </button>
         </div>
       </div>
-      <table mat-table [dataSource]="quotations" class="mat-elevation-z8 table-responsive" matSort>
+      <mat-spinner *ngIf="showSpinner"></mat-spinner>
+      <table mat-table [dataSource]="quotations" class="mat-elevation-z8 table-responsive" matSort *ngIf="!showSpinner">
 
         <ng-container matColumnDef="date">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Date</th>
@@ -242,7 +243,7 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr style="cursor:pointer;" mat-row (click)="selectRow(row)" [class]="clickedDiv==row.id?'mat-row ng-star-inserted selected':'mat-row ng-star-inserted'" *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
-      <mat-paginator [pageSizeOptions]="[10, 25, 50,100,150,200,500]"></mat-paginator>
+      <mat-paginator [pageSizeOptions]="[25,50,100,150,200,500]"></mat-paginator>
     </mat-card-content>
   </mat-card>
 </div>

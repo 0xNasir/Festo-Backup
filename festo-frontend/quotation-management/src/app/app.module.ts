@@ -19,7 +19,7 @@ import {
   MatFormFieldModule,
   MatGridListModule,
   MatInputModule,
-  MatNativeDateModule, MatPaginatorModule, MatProgressBarModule,
+  MatNativeDateModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule,
   MatSelectModule, MatSnackBarModule, MatSortModule
 } from '@angular/material';
 import {MatMenuModule} from '@angular/material/menu';
@@ -98,7 +98,8 @@ import { ManageHistoryComponent } from './quotations/manage-history/manage-histo
     MatAutocompleteModule,
     MatCheckboxModule,
     MatTooltipModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatProgressSpinnerModule
   ],
   providers: [AuthGuard, AuthService, RedirectService],
   bootstrap: [AppComponent]

@@ -36,7 +36,7 @@
         <mat-error *ngIf="form.get('productQuantity').hasError('required')">Field is required</mat-error>
         <mat-error *ngIf="form.get('productQuantity').hasError('max')&&data.mType=='out'">Quantity must be 1 - {{data.content.productInStock}}</mat-error>
         <mat-error *ngIf="form.get('productQuantity').hasError('min')&&data.mType=='out'">Quantity must be 1 - {{data.content.productInStock}}</mat-error>
-        <mat-error *ngIf="form.get('productQuantity').hasError('min')&&data.mType=='in'">Quantity must be greater than or equal to 1</mat-error>
+        <mat-error *ngIf="form.get('productQuantity').hasError('min')&&data.mType=='in'">Quantity can't be negative or zero</mat-error>
       </mat-form-field>
     </div>
 </div>

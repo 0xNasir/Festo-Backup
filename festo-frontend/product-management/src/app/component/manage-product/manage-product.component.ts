@@ -7,6 +7,7 @@ import {Location} from '@angular/common';
 import {ProductDialogComponent} from '../../dialog/product/product.dialog.component';
 import {AuthService} from '../../service/auth.service';
 import {RevisionDialogComponent} from '../../dialog/product-revision/revision.dialog.component';
+import {ImportDialogComponent} from '../../dialog/import/import.dialog.component';
 
 @Component({
   selector: 'app-manage-product',
@@ -137,6 +138,16 @@ export class ManageProductComponent implements OnInit {
     });
     this.zeroPriceProduct = productData;
     this.product = new MatTableDataSource(productData);
+  }
+
+  ImportFromCSV() {
+    const dialogRef = this.dialog.open(ImportDialogComponent, {
+      width: '800px',
+      data: null
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      this.ngOnInit();
+    });
   }
 
   saveAsCSV() {

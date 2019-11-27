@@ -35,11 +35,12 @@ export class AddProductComponent implements OnInit {
       productType: ['', Validators.required],
       productCategory: ['', Validators.required],
       productDescription: ['', Validators.required],
-      productPrice: ['', Validators.required],
-      productInStock: ['', Validators.required],
-      productUuq: [0, Validators.required],
-      productLoan: [0, Validators.required],
-      productBooking: [0, Validators.required],
+      productPrice: ['', [Validators.required, Validators.min(0)]],
+      productBasePrice: ['', [Validators.required, Validators.min(0)]],
+      productInStock: ['', [Validators.required, Validators.min(0)]],
+      productUuq: [0, [Validators.required, Validators.min(0)]],
+      productLoan: [0, [Validators.required, Validators.min(0)]],
+      productBooking: [0, [Validators.required, Validators.min(0)]],
       productOrigin: ['', Validators.required]
     });
   }

@@ -26,7 +26,6 @@ export class AddRevisedQuotationComponent implements OnInit {
   showAddBranchLink: boolean;
   companyId: string;
   branchId: string;
-  firstSave: number = 0;
   updateQuotationForm: FormGroup;
   quotation: Quotations;
   progressValue: number;
@@ -88,14 +87,14 @@ export class AddRevisedQuotationComponent implements OnInit {
         quotationData.productList.forEach(prdt => {
           productArray.push(this.fb.group({
             productId: prdt.productId,
-            productName: prdt.productName,
-            productPartNumber: prdt.productPartNumber,
-            internalPartNumber: prdt.internalPartNumber,
-            productType: prdt.productType,
-            productQty: prdt.productQty,
-            productQtyAvailable: prdt.productQtyAvailable,
-            productPrice: prdt.productPrice,
-            productDescription: prdt.productDescription
+            productName: [prdt.productName, Validators.required],
+            productPartNumber: [prdt.productPartNumber, Validators.required],
+            internalPartNumber: [prdt.internalPartNumber, Validators.required],
+            productType: [prdt.productType, Validators.required],
+            productQty: [prdt.productQty, [Validators.required, Validators.min(1)]],
+            productQtyAvailable: [prdt.productQtyAvailable, [Validators.required, Validators.min(0)]],
+            productPrice: [prdt.productPrice, [Validators.required, Validators.min(0)]],
+            productDescription: [prdt.productDescription]
           }));
         });
         let pdfGroup;
@@ -202,9 +201,9 @@ export class AddRevisedQuotationComponent implements OnInit {
       productPartNumber: ['', Validators.required],
       internalPartNumber: ['', Validators.required],
       productType: ['', Validators.required],
-      productQty: ['', Validators.required],
-      productQtyAvailable: ['', Validators.required],
-      productPrice: ['', Validators.required],
+      productQty: ['', [Validators.required, Validators.min(1)]],
+      productQtyAvailable: ['', [Validators.required, Validators.min(0)]],
+      productPrice: ['', [Validators.required, Validators.min(0)]],
       productDescription: ['', Validators.required]
     });
   }
@@ -234,9 +233,9 @@ export class AddRevisedQuotationComponent implements OnInit {
     }
     this.quotationService.updateQuotation(upDt).subscribe(data => {
       this.quotationService.storeRevisedQuotations(upDt, this.id).subscribe(rdt => {
-        this.revisedId = rdt['quotationId'];
-        this.quotationService.updateRevisedQuotation(upDt, this.revisedId).subscribe(data => {
-          this.snackBar.open(data['message'], 'Close', {
+        this.revisedId = rdt.quotationId;
+        this.quotationService.updateRevisedQuotation(upDt, this.revisedId).subscribe(uRetdata => {
+          this.snackBar.open(uRetdata.message, 'Close', {
             duration: 2000,
           });
           this.router.navigate(['quotations']);
@@ -337,10 +336,10 @@ export class AddRevisedQuotationComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       this.selectClient(result);
       this.updateQuotationForm.get('companyName').setValue(result.companyName);
-      this.updateQuotationForm.get('branchName').setValue(result.branch[0]['branchName']);
-      this.updateQuotationForm.get('branchAddress').setValue(result.branch[0]['branchAddress']);
-      this.updateQuotationForm.get('contactPerson').setValue(result.branch[0]['contactPerson'][0]['personName']);
-      this.updateQuotationForm.get('designation').setValue(result.branch[0]['contactPerson'][0]['personDesignation']);
+      this.updateQuotationForm.get('branchName').setValue(result.branch[0].branchName);
+      this.updateQuotationForm.get('branchAddress').setValue(result.branch[0].branchAddress);
+      this.updateQuotationForm.get('contactPerson').setValue(result.branch[0].contactPerson[0].personName);
+      this.updateQuotationForm.get('designation').setValue(result.branch[0].contactPerson[0].personDesignation);
       this.updateQuotationForm.get('branchAddress').enable();
       this.updateQuotationForm.get('contactPerson').enable();
       this.updateQuotationForm.get('designation').enable();
@@ -357,10 +356,10 @@ export class AddRevisedQuotationComponent implements OnInit {
       data: this.companyId
     });
     dialogRef.afterClosed().subscribe(result => {
-      this.updateQuotationForm.get('branchName').setValue(result['branchName']);
-      this.updateQuotationForm.get('branchAddress').setValue(result['branchAddress']);
-      this.updateQuotationForm.get('contactPerson').setValue(result['contactPerson'][0]['personName']);
-      this.updateQuotationForm.get('designation').setValue(result['contactPerson'][0]['personDesignation']);
+      this.updateQuotationForm.get('branchName').setValue(result.branchName);
+      this.updateQuotationForm.get('branchAddress').setValue(result.branchAddress);
+      this.updateQuotationForm.get('contactPerson').setValue(result.contactPerson[0].personName);
+      this.updateQuotationForm.get('designation').setValue(result.contactPerson[0].personDesignation);
       this.updateQuotationForm.get('designation').enable();
       this.showAddBranchLink = false;
     });
@@ -392,8 +391,8 @@ export class AddRevisedQuotationComponent implements OnInit {
       data: this.branchId
     });
     dialogRef.afterClosed().subscribe(result => {
-      this.updateQuotationForm.get('contactPerson').setValue(result['personName']);
-      this.updateQuotationForm.get('designation').setValue(result['personDesignation']);
+      this.updateQuotationForm.get('contactPerson').setValue(result.personName);
+      this.updateQuotationForm.get('designation').setValue(result.personDesignation);
       this.updateQuotationForm.get('designation').enable();
       this.showAddPersonLink = false;
     });

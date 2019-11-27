@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 18, 2019 at 08:21 AM
+-- Generation Time: Nov 27, 2019 at 10:43 AM
 -- Server version: 10.1.36-MariaDB
 -- PHP Version: 7.2.11
 
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `client_management`
+-- Database: `common_client_management`
 --
 
 -- --------------------------------------------------------
@@ -35,6 +35,14 @@ CREATE TABLE `branch` (
   `company` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `branch`
+--
+
+INSERT INTO `branch` (`branchId`, `branchName`, `branchAddress`, `company`) VALUES
+(1, 'Corporate Office', 'Tanim Center, 3 Asad Gate, Mohammadpur, Dhaka-1207', 1),
+(3, 'Head office', 'Dhaka-1205', 3);
+
 -- --------------------------------------------------------
 
 --
@@ -46,6 +54,14 @@ CREATE TABLE `company` (
   `companyName` varchar(100) DEFAULT NULL,
   `isAuthorized` enum('false','true') NOT NULL DEFAULT 'false'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `company`
+--
+
+INSERT INTO `company` (`companyId`, `companyName`, `isAuthorized`) VALUES
+(1, 'The IBN SINA Pharmaceutical Industry Ltd.', 'false'),
+(3, 'Square pharma', 'false');
 
 -- --------------------------------------------------------
 
@@ -61,6 +77,14 @@ CREATE TABLE `contact_person` (
   `designation` varchar(100) NOT NULL,
   `branch` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `contact_person`
+--
+
+INSERT INTO `contact_person` (`personId`, `personName`, `personEmail`, `personNumber`, `designation`, `branch`) VALUES
+(1, 'Mr. Md. Nazimul Hauque Murad', 'murad@ibnsinapharma.com', '+8801745-689322', 'Assistant General Manager', 1),
+(3, 'Kamal Ahammed', 'kamal@squarepharma.com', '01763433486', 'sdfasdf', 3);
 
 --
 -- Indexes for dumped tables
@@ -94,19 +118,19 @@ ALTER TABLE `contact_person`
 -- AUTO_INCREMENT for table `branch`
 --
 ALTER TABLE `branch`
-  MODIFY `branchId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=382;
+  MODIFY `branchId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `company`
 --
 ALTER TABLE `company`
-  MODIFY `companyId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=172;
+  MODIFY `companyId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `contact_person`
 --
 ALTER TABLE `contact_person`
-  MODIFY `personId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=538;
+  MODIFY `personId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables

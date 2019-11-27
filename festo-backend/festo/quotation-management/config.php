@@ -13,7 +13,7 @@ define('DOMAIN', '127.0.0.1');
 
 // Working Directory name
 // TODO: Change it or make it empty if public directory
-define('WDN', 'product-management/');
+define('WDN', 'festo/quotation-management/');
 
 // Application Directory Name
 // TODO: Change it only if you changed the 'app' directory
@@ -49,7 +49,7 @@ define('DB_DRIVER', 'mysqli');
 define('DB_HOSTNAME', 'localhost');
 define('DB_USERNAME', 'root');
 define('DB_PASSWORD', '');
-define('DB_DATABASE', 'product_management');
+define('DB_DATABASE', 'festo_quotation_management');
 define('DB_PORT', '3306');
 define('DB_PREFIX', '');
 

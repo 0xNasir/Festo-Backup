@@ -178,8 +178,8 @@
           </div>
 
           <mat-action-row>
-            <button type="button" mat-button
-                    [disabled]="! updateQuotationForm.value.contactBy || ! updateQuotationForm.value.status||! updateQuotationForm.value.designation ||! updateQuotationForm.value.contactPerson || ! updateQuotationForm.value.branchAddress ||! updateQuotationForm.value.branchName || ! updateQuotationForm.value.companyName||! updateQuotationForm.value.quotaNo || ! updateQuotationForm.value.date"
+            <button type="button" mat-button [class.spinner]="loading"
+                    [disabled]="loading || ! updateQuotationForm.value.contactBy || ! updateQuotationForm.value.status||! updateQuotationForm.value.designation ||! updateQuotationForm.value.contactPerson || ! updateQuotationForm.value.branchAddress ||! updateQuotationForm.value.branchName || ! updateQuotationForm.value.companyName||! updateQuotationForm.value.quotaNo || ! updateQuotationForm.value.date"
                     color="primary" (click)="saveQuotation()">Update and Continue
             </button>
           </mat-action-row>
@@ -312,7 +312,8 @@
           </div>
           <mat-action-row>
             <button type="button" mat-button color="warn" (click)="prevStep()">Previous</button>
-            <button type="button" [disabled]="updateQuotationForm.get('productList').invalid" mat-button color="primary" (click)="saveQuotation()">Update and Continue</button>
+            <button type="button"  [class.spinner]="loading"
+                    [disabled]="loading || updateQuotationForm.get('productList').invalid" mat-button color="primary" (click)="saveQuotation()">Update and Continue</button>
           </mat-action-row>
         </mat-expansion-panel>
 
@@ -355,7 +356,8 @@
           </div>
           <mat-action-row>
             <button type="button" mat-button color="warn" (click)="prevStep()">Previous</button>
-            <button type="button" [disabled]="updateQuotationForm.get('productList').invalid" mat-button color="primary" (click)="saveQuotation()">Update and Continue</button>
+            <button type="button"  [class.spinner]="loading"
+                    [disabled]="loading || updateQuotationForm.get('productList').invalid" mat-button color="primary" (click)="saveQuotation()">Update and Continue</button>
           </mat-action-row>
         </mat-expansion-panel>
 
@@ -453,7 +455,8 @@
           </div>
           <mat-action-row>
             <button mat-button type="button" color="warn" (click)="prevStep()">Previous</button>
-            <button [disabled]="updateQuotationForm.invalid" mat-button color="primary" (click)="saveQuotation()">Save</button>
+            <button  [class.spinner]="loading"
+                     [disabled]="loading || updateQuotationForm.invalid" mat-button color="primary" (click)="saveQuotation()">Save</button>
           </mat-action-row>
         </mat-expansion-panel>
       </mat-accordion>

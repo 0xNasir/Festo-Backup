@@ -48,6 +48,7 @@ export class UpdateProductComponent implements OnInit {
           productCategory: this.product.productCategory,
           productDescription: this.product.productDescription,
           productPrice: this.product.productPrice,
+          productBasePrice: this.product.productBasePrice,
           productInStock: this.product.productInStock,
           productUuq: this.product.productUuq,
           productLoan: this.product.productLoan,
@@ -66,11 +67,12 @@ export class UpdateProductComponent implements OnInit {
       productType: ['', Validators.required],
       productCategory: ['', Validators.required],
       productDescription: ['', Validators.required],
-      productPrice: ['', Validators.required],
-      productInStock: ['', Validators.required],
-      productUuq: ['', Validators.required],
-      productLoan: ['', Validators.required],
-      productBooking: ['', Validators.required],
+      productPrice: ['', [Validators.required, Validators.min(0)]],
+      productBasePrice: ['', [Validators.required, Validators.min(0)]],
+      productInStock: ['', [Validators.required, Validators.min(0)]],
+      productUuq: [0, [Validators.required, Validators.min(0)]],
+      productLoan: [0, [Validators.required, Validators.min(0)]],
+      productBooking: [0, [Validators.required, Validators.min(0)]],
       productOrigin: ['', Validators.required]
     });
   }

@@ -8,6 +8,9 @@
     </div>
     <div>
       <div *ngIf="!isHandset">
+        <button *ngIf="permission.pms.pms_import_csv" mat-button (click)="ImportFromCSV()">
+          Import from CSV
+        </button>
         <button *ngIf="permission.pms.pms_generate_csv && showExporZeroPriceProduct" mat-button (click)="saveAsCSV()">
           Export as CSV
         </button>
@@ -48,6 +51,11 @@
                        [opened]="false" position="end">
             <mat-toolbar><button mat-flat-button (click)="drawer.toggle()">X</button></mat-toolbar>
             <mat-nav-list>
+              <div class="list-item">
+                <button *ngIf="permission.pms.pms_import_csv" mat-button (click)="ImportFromCSV()" style="width: 100%; text-align: left; border-bottom: 1px solid #000; border-radius: 0; padding-left: 0;">
+                  Import from CSV
+                </button>
+              </div>
               <div class="list-item">
                 <button *ngIf="permission.pms.pms_generate_csv" mat-button (click)="saveAsCSV()" style="width: 100%; text-align: left; border-bottom: 1px solid #000; border-radius: 0; padding-left: 0;">
                   Export as CSV
@@ -118,8 +126,8 @@
             fullscreen
           </i></button>
         </span>
-        <button mat-flat-button *ngIf="permission.pms.pms_stock_in" [disabled]="!clickedDiv" matTooltip="Stock In" color="primary" (click)="OpenRevisionDialog(selectedProduct, selectedProduct.productName,'in')" style="margin-right: 10px;">Stock In<mat-icon aria-hidden="false" aria-label="eye icon">edit</mat-icon></button>
-        <button mat-flat-button *ngIf="permission.pms.pms_stock_out" [disabled]="!clickedDiv" matTooltip="Stock Out" color="primary" (click)="OpenRevisionDialog(selectedProduct, selectedProduct.productName,'out')">Stock Out<mat-icon aria-hidden="false" aria-label="eye icon">edit</mat-icon></button>
+        <button mat-flat-button *ngIf="permission.pms.pms_stock_in" [disabled]="!clickedDiv" matTooltip="Stock In" color="primary" (click)="OpenRevisionDialog(selectedProduct, selectedProduct.productName,'in')" style="margin-right: 10px;">Stock In<mat-icon aria-hidden="false" aria-label="eye icon">arrow_downward</mat-icon></button>
+        <button mat-flat-button *ngIf="permission.pms.pms_stock_out" [disabled]="!clickedDiv" matTooltip="Stock Out" color="primary" (click)="OpenRevisionDialog(selectedProduct, selectedProduct.productName,'out')">Stock Out<mat-icon aria-hidden="false" aria-label="eye icon">arrow_upward</mat-icon></button>
         <button mat-flat-button *ngIf="permission.pms.pms_price_log" [disabled]="!clickedDiv" matTooltip="View price logs" color="primary" (click)="OpenRevisionDialog(selectedProduct.productPriceRevision, selectedProduct.productName,'price')" style="margin-left: 10px;">
           Price Log<mat-icon aria-hidden="false" aria-label="eye icon">remove_red_eye</mat-icon>
         </button>

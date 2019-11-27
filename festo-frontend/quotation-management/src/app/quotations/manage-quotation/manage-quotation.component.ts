@@ -22,9 +22,10 @@ export class FilterDate {
   styleUrls: ['./manage-quotation.component.css']
 })
 export class ManageQuotationComponent implements OnInit {
+  showSpinner: boolean;
   filterTxt: string;
-  filterFieldPlaceholder: string = 'Filter';
-  filterBy: number = 2;
+  filterFieldPlaceholder = 'Filter';
+  filterBy = 2;
   permission: any;
   filterData: FilterDate = {
     fromDate: '',
@@ -57,6 +58,7 @@ export class ManageQuotationComponent implements OnInit {
 
 
   ngOnInit() {
+    this.showSpinner = true;
     this.onResize(event);
     this.activatedRoute.paramMap.subscribe(params => {
       this.status = params.get('status');
@@ -70,6 +72,7 @@ export class ManageQuotationComponent implements OnInit {
   getQuotation(status: string): void {
     this.clickedDiv = '';
     this.quotationService.getAllQuotations().subscribe(data => {
+      this.showSpinner = false;
       this.quotationArray = data;
       this.selectedQuotation = this.quotationArray[0];
       if (status) {
@@ -124,7 +127,7 @@ export class ManageQuotationComponent implements OnInit {
     if (confirm('Do you want to delete quotation?')) {
       this.quotationService.deleteQuotation(id).subscribe(data => {
         this.getQuotation(this.status);
-        this.snackBar.open(data['message'], 'Close', {
+        this.snackBar.open(data.message, 'Close', {
           duration: 2000,
         });
       });
@@ -246,7 +249,7 @@ export class ManageQuotationComponent implements OnInit {
   markAs(status: string) {
     this.quotationService.updateStatus(status, this.selectedQuotation.id).subscribe(dts => {
       this.getQuotation(this.status);
-      this.snackBar.open(dts['message'], 'Close', {
+      this.snackBar.open(dts.message, 'Close', {
         duration: 2000,
       });
     });

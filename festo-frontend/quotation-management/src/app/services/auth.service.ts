@@ -30,6 +30,7 @@ export class AuthService {
       catchError(err => {
         if (err.status === 401) {
           console.log(err);
+          document.location.href = Travel.swassertiveURL;
         }
         return of(false);
       })

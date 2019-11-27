@@ -41,23 +41,34 @@
             </mat-form-field>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
           <div class="input-group">
             <mat-form-field class="price">
-              <input matInput placeholder="Unit Price" type="number" formControlName="productPrice" required>
-              <mat-error>Field is required</mat-error>
+              <input matInput placeholder="Sales Unit Price" type="number" formControlName="productPrice" required>
+              <mat-error *ngIf="form.get('productPrice').hasError('required')">Field is required</mat-error>
+              <mat-error *ngIf="form.get('productPrice').hasError('min')">Price can't be negative</mat-error>
             </mat-form-field>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
+          <div class="input-group">
+            <mat-form-field class="price">
+              <input matInput placeholder="Base Unit Price" type="number" formControlName="productBasePrice" required>
+              <mat-error *ngIf="form.get('productBasePrice').hasError('required')">Field is required</mat-error>
+              <mat-error *ngIf="form.get('productBasePrice').hasError('min')">Price can't be negative</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-md-3">
           <div class="input-group">
             <mat-form-field class="stock">
               <input matInput placeholder="In Stock" type="number" formControlName="productInStock" required>
-              <mat-error>Field is required</mat-error>
+              <mat-error *ngIf="form.get('productInStock').hasError('required')">Field is required</mat-error>
+              <mat-error *ngIf="form.get('productInStock').hasError('min')">Stock can't be negative</mat-error>
             </mat-form-field>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
           <div class="input-group">
             <mat-form-field class="origin">
               <input matInput placeholder="Country of origin" type="text" formControlName="productOrigin" required>
@@ -69,7 +80,8 @@
           <div class="input-group">
             <mat-form-field class="uuq">
               <input matInput placeholder="Upcoming product" type="number" formControlName="productUuq" required>
-              <mat-error>Field is required</mat-error>
+              <mat-error *ngIf="form.get('productUuq').hasError('required')">Field is required</mat-error>
+              <mat-error *ngIf="form.get('productUuq').hasError('min')">Upcoming quantity can't be negative</mat-error>
             </mat-form-field>
           </div>
         </div>
@@ -77,7 +89,8 @@
           <div class="input-group">
             <mat-form-field class="loan">
               <input matInput placeholder="Lent product" type="number" formControlName="productLoan" required>
-              <mat-error>Field is required</mat-error>
+              <mat-error *ngIf="form.get('productLoan').hasError('required')">Field is required</mat-error>
+              <mat-error *ngIf="form.get('productLoan').hasError('min')">Lent quantity can't be negative</mat-error>
             </mat-form-field>
           </div>
         </div>
@@ -85,7 +98,8 @@
           <div class="input-group">
             <mat-form-field class="booking">
               <input matInput placeholder="Booked product" type="number" formControlName="productBooking" required>
-              <mat-error>Field is required</mat-error>
+              <mat-error *ngIf="form.get('productBooking').hasError('required')">Field is required</mat-error>
+              <mat-error *ngIf="form.get('productBooking').hasError('min')">Booking quantity can't be negative</mat-error>
             </mat-form-field>
           </div>
         </div>

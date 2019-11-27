@@ -2,6 +2,18 @@
 header('Content-Type: application/json');
 httpRESTMethod::get(function (){
     global $db;
+    $sMonthBack=strtotime("-6 months");
+    $sql=$db->query("SELECT * FROM products WHERE productAddedOn <='$sMonthBack'");
+    if ($sql->num_rows){
+        foreach ($sql->rows as $dts){
+            $id=$dts['productId'];
+            $t=$db->query("UPDATE products SET productPrice=0 WHERE productId='$id'");
+            if ($t){
+                continue;
+            }
+        }
+    }
+
     if (isset($_GET['id'])){
         $id=$_GET['id'];
         $rData=array();
@@ -14,6 +26,7 @@ httpRESTMethod::get(function (){
             $rData["productCategory"]=$values["productCategory"];
             $rData["productDescription"]=$values["productDescription"];
             $rData["productPrice"]=$values["productPrice"];
+            $rData["productBasePrice"]=$values["productBasePrice"];
             $rData["productInStock"]=$values["productInStock"];
             $rData["productUuq"]=$values["productUuq"];
             $rData["productLoan"]=$values["productLoan"];
@@ -40,6 +53,7 @@ httpRESTMethod::get(function (){
             $rData["productCategory"]=$values["productCategory"];
             $rData["productDescription"]=$values["productDescription"];
             $rData["productPrice"]=$values["productPrice"];
+            $rData["productBasePrice"]=$values["productBasePrice"];
             $rData["productInStock"]=$values["productInStock"];
             $rData["productUuq"]=$values["productUuq"];
             $rData["productLoan"]=$values["productLoan"];
@@ -60,10 +74,10 @@ httpRESTMethod::post(function ($data){
        $rData["message"]="Type already exists. Please try another one.";
        return $rData;
    }
-    $result=$db->query("INSERT INTO `products` (`productId`,`productName`, `productPartNo`, `productType`, `productCategory`, `productDescription`, `productPrice`, `productInStock`, `productUuq`, `productLoan`, `productBooking`, `productOrigin`) VALUES (NULL, '$data->productName','$data->productPartNo','$data->productType', '$data->productCategory', '$data->productDescription', '$data->productPrice', '$data->productInStock', '$data->productUuq', '$data->productLoan', '$data->productBooking', '$data->productOrigin')");
+    $time=time();
+    $result=$db->query("INSERT INTO `products` (`productId`,`productName`, `productPartNo`, `productType`, `productCategory`, `productDescription`, `productPrice`, `productBasePrice`, `productInStock`, `productUuq`, `productLoan`, `productBooking`, `productOrigin`, `productAddedOn`) VALUES (NULL, '$data->productName','$data->productPartNo','$data->productType', '$data->productCategory', '$data->productDescription', '$data->productPrice', '$data->productBasePrice', '$data->productInStock', '$data->productUuq', '$data->productLoan', '$data->productBooking', '$data->productOrigin', '$time')");
    if ($result){
        $lastId=$db->getLastId();
-       $time=time();
        $sql1=$db->query("INSERT INTO `product_price_revision` (`revisionId`, `product`, `revisionPrice`, `revisionDate`) VALUES (NULL, '$lastId', '$data->productPrice', '$time')");
        $sql2=$db->query("INSERT INTO `product_quantity_revision` (`revisionId`, `product`, `revisionInStock`, `revisionDate`) VALUES (NULL, '$lastId', '$data->productInStock', '$time')");
        if ($sql1&&$sql2){
@@ -94,7 +108,7 @@ httpRESTMethod::put(function ($data){
    }
    $queryData=$db->query("SELECT * FROM products WHERE productId='$data->productId'");
    $dt=$queryData->rows[0];
-   $result=$db->query("UPDATE `products` SET `productName` = '$data->productName', `productPartNo` = '$data->productPartNo',`productType` = '$data->productType', `productCategory` = '$data->productCategory', `productDescription` = '$data->productDescription', `productPrice` = '$data->productPrice', `productInStock` = '$data->productInStock', `productUuq` = '$data->productUuq', `productLoan` = '$data->productLoan', `productBooking` = '$data->productBooking', `productOrigin` = '$data->productOrigin' WHERE `products`.`productId` = '$data->productId'");
+   $result=$db->query("UPDATE `products` SET `productName` = '$data->productName', `productPartNo` = '$data->productPartNo',`productType` = '$data->productType', `productCategory` = '$data->productCategory', `productDescription` = '$data->productDescription', `productPrice` = '$data->productPrice', `productBasePrice` = '$data->productBasePrice', `productInStock` = '$data->productInStock', `productUuq` = '$data->productUuq', `productLoan` = '$data->productLoan', `productBooking` = '$data->productBooking', `productOrigin` = '$data->productOrigin' WHERE `products`.`productId` = '$data->productId'");
    if ($result){
        $time=time();
        if ($dt['productPrice']!=$data->productPrice){

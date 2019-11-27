@@ -25,6 +25,7 @@ export interface QuotaStatus {
 
 export class UpdateQuotationComponent implements OnInit {
   historyId: number;
+  public loading: boolean;
   showAddPersonLink: boolean;
   showAddCompanyLink: boolean;
   showAddBranchLink: boolean;
@@ -51,7 +52,7 @@ export class UpdateQuotationComponent implements OnInit {
   ];
   public permission: any;
   public allUser: any;
-  public step: number = 0;
+  public step = 0;
   public showAddProductLink3: boolean;
   public filteredOptions = ['Cash cheque / Account payee cheque at the time of delivery.',
     'Cash cheque / Account payee cheque at the time of delivery. <br>40% of the total amount ' +
@@ -76,6 +77,7 @@ export class UpdateQuotationComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loading = false;
     this.progressValue = 100;
     this.buildForm();
     this.activatedRoute.paramMap.subscribe(params => {
@@ -89,25 +91,25 @@ export class UpdateQuotationComponent implements OnInit {
         quotationData.productList.forEach(prdt => {
           productArray.push(this.fb.group({
             productId: null,
-            productName: prdt.productName,
-            productPartNumber: prdt.productPartNumber,
-            internalPartNumber: prdt.internalPartNumber,
-            productType: prdt.productType,
-            productQty: prdt.productQty,
-            productQtyAvailable: prdt.productQtyAvailable,
-            productPrice: prdt.productPrice,
-            productDescription: prdt.productDescription,
-            totalPrice: prdt.productQty * prdt.productPrice
+            productName: [prdt.productName, Validators.required],
+            productPartNumber: [prdt.productPartNumber, Validators.required],
+            internalPartNumber: [prdt.internalPartNumber, Validators.required],
+            productType: [prdt.productType, Validators.required],
+            productQty: [prdt.productQty, Validators.required],
+            productQtyAvailable: [prdt.productQtyAvailable, Validators.required],
+            productPrice: [prdt.productPrice, Validators.required],
+            productDescription: [prdt.productDescription, Validators.required],
+            totalPrice: [prdt.productQty * prdt.productPrice, Validators.required]
           }));
         });
         let pdfGroup;
         if (this.quotation.doc) {
           pdfGroup = this.fb.group({
-            pdfId: this.quotation.doc.pdfId,
-            pdfSubject: this.quotation.doc.pdfSubject,
-            pdfBody: this.quotation.doc.pdfBody,
-            pdfVat: this.quotation.doc.pdfVat,
-            suggestion: this.quotation.doc.suggestion
+            pdfId: [this.quotation.doc.pdfId],
+            pdfSubject: [this.quotation.doc.pdfSubject, Validators.required],
+            pdfBody: [this.quotation.doc.pdfBody, Validators.required],
+            pdfVat: [this.quotation.doc.pdfVat, Validators.required],
+            suggestion: [this.quotation.doc.suggestion, Validators.required]
           });
         } else {
           pdfGroup = this.makePdfContent();
@@ -139,14 +141,14 @@ export class UpdateQuotationComponent implements OnInit {
         if (quotationData.terms) {
           quotationData.terms.forEach(data => {
             termsArray.push(this.fb.group({
-              topic: data.topic,
-              message: data.message
+              topic: [data.topic, Validators.required],
+              message: [data.message, Validators.required]
             }));
           });
         } else {
           termsArray.push(this.fb.group({
-            topic: '',
-            message: ''
+            topic: ['', Validators.required],
+            message: ['', Validators.required]
           }));
         }
         this.updateQuotationForm.setControl('termsCondition', termsArray);
@@ -231,27 +233,29 @@ export class UpdateQuotationComponent implements OnInit {
 
 
   saveQuotation() {
+    this.loading = true;
     const upDt = this.updateQuotationForm.value;
     if (!/^\d+$/.test(this.updateQuotationForm.value.date)) {
       upDt.date = Math.trunc(this.updateQuotationForm.value.date.getTime() / 1000);
     }
     this.quotationService.updateQuotation(upDt).subscribe(data => {
       this.step++;
+      this.loading = false;
       if (this.historyId) {
         this.quotationService.updateHistory(upDt, this.historyId).subscribe(historyPrdt => {
-          this.snackBar.open(data['message'], 'Close', {
+          this.snackBar.open(data.message, 'Close', {
             duration: 2000,
           });
         });
       } else {
         this.quotationService.saveHistory(upDt).subscribe(historyData => {
-          this.historyId = historyData['id'];
+          this.historyId = historyData.id;
         });
       }
       if (this.step === 4) {
         this.router.navigate(['quotations']);
       }
-      this.snackBar.open(data['message'], 'Close', {
+      this.snackBar.open(data.message, 'Close', {
         duration: 2000,
       });
     });
@@ -335,11 +339,11 @@ export class UpdateQuotationComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       this.selectClient(result);
-      this.updateQuotationForm.get('companyName').setValue(result['companyName']);
-      this.updateQuotationForm.get('branchName').setValue(result.branch[0]['branchName']);
-      this.updateQuotationForm.get('branchAddress').setValue(result.branch[0]['branchAddress']);
-      this.updateQuotationForm.get('contactPerson').setValue(result.branch[0]['contactPerson'][0]['personName']);
-      this.updateQuotationForm.get('designation').setValue(result.branch[0]['contactPerson'][0]['personDesignation']);
+      this.updateQuotationForm.get('companyName').setValue(result.companyName);
+      this.updateQuotationForm.get('branchName').setValue(result.branch[0].branchName);
+      this.updateQuotationForm.get('branchAddress').setValue(result.branch[0].branchAddress);
+      this.updateQuotationForm.get('contactPerson').setValue(result.branch[0].contactPerson[0].personName);
+      this.updateQuotationForm.get('designation').setValue(result.branch[0].contactPerson[0].personDesignation);
       this.updateQuotationForm.get('branchAddress').enable();
       this.updateQuotationForm.get('contactPerson').enable();
       this.updateQuotationForm.get('designation').enable();
@@ -356,10 +360,10 @@ export class UpdateQuotationComponent implements OnInit {
       data: this.companyId
     });
     dialogRef.afterClosed().subscribe(result => {
-      this.updateQuotationForm.get('branchName').setValue(result['branchName']);
-      this.updateQuotationForm.get('branchAddress').setValue(result['branchAddress']);
-      this.updateQuotationForm.get('contactPerson').setValue(result['contactPerson'][0]['personName']);
-      this.updateQuotationForm.get('designation').setValue(result['contactPerson'][0]['personDesignation']);
+      this.updateQuotationForm.get('branchName').setValue(result.branchName);
+      this.updateQuotationForm.get('branchAddress').setValue(result.branchAddress);
+      this.updateQuotationForm.get('contactPerson').setValue(result.contactPerson[0].personName);
+      this.updateQuotationForm.get('designation').setValue(result.contactPerson[0].personDesignation);
       this.updateQuotationForm.get('branchAddress').enable();
       this.updateQuotationForm.get('contactPerson').enable();
       this.updateQuotationForm.get('designation').enable();
@@ -422,6 +426,7 @@ export class UpdateQuotationComponent implements OnInit {
       this.showAddProductLink3 = this.SearchProduct.length === 0;
     });
   }
+
   selectContactBy(user: any) {
     this.updateQuotationForm.get('contactByDesignation').setValue(user.designations[0].title);
     this.updateQuotationForm.get('contactByPhone').setValue(user.phones[0].number);

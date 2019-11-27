@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 18, 2019 at 08:22 AM
+-- Generation Time: Nov 27, 2019 at 10:44 AM
 -- Server version: 10.1.36-MariaDB
 -- PHP Version: 7.2.11
 
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `product_management`
+-- Database: `festo_product_management`
 --
 
 -- --------------------------------------------------------
@@ -36,11 +36,13 @@ CREATE TABLE `products` (
   `productCategory` varchar(50) NOT NULL,
   `productDescription` text NOT NULL,
   `productPrice` decimal(10,2) NOT NULL,
+  `productBasePrice` decimal(10,2) NOT NULL,
   `productInStock` int(11) NOT NULL COMMENT 'Product in stock',
   `productUuq` int(11) NOT NULL COMMENT 'Quantity of upcoming product',
   `productLoan` int(11) NOT NULL COMMENT 'Number of lent product',
   `productBooking` int(11) NOT NULL COMMENT 'Number of booked product by customers',
-  `productOrigin` varchar(100) NOT NULL
+  `productOrigin` varchar(100) NOT NULL,
+  `productAddedOn` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -104,19 +106,19 @@ ALTER TABLE `product_quantity_revision`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `productId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `productId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `product_price_revision`
 --
 ALTER TABLE `product_price_revision`
-  MODIFY `revisionId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `revisionId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `product_quantity_revision`
 --
 ALTER TABLE `product_quantity_revision`
-  MODIFY `revisionId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=136;
+  MODIFY `revisionId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Constraints for dumped tables

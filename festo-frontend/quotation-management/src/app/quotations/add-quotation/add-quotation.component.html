@@ -186,12 +186,12 @@
           </div>
 
           <mat-action-row>
-            <button type="button" mat-button
-                    [disabled]="! quotationForm.value.contactBy || ! quotationForm.value.status||! quotationForm.value.designation ||! quotationForm.value.contactPerson || ! quotationForm.value.branchAddress ||! quotationForm.value.branchName || ! quotationForm.value.companyName||! quotationForm.value.quotaNo || ! quotationForm.value.date"
+            <button type="button" mat-button [class.spinner]="loading"
+                    [disabled]="loading || ! quotationForm.value.contactBy || ! quotationForm.value.status||! quotationForm.value.designation ||! quotationForm.value.contactPerson || ! quotationForm.value.branchAddress ||! quotationForm.value.branchName || ! quotationForm.value.companyName||! quotationForm.value.quotaNo || ! quotationForm.value.date"
                     color="primary" *ngIf="firstSubmit" (click)="saveQuotation()">Next
             </button>
-            <button type="button" mat-button
-                    [disabled]="! quotationForm.value.contactBy || ! quotationForm.value.status||! quotationForm.value.designation ||! quotationForm.value.contactPerson || ! quotationForm.value.branchAddress ||! quotationForm.value.branchName || ! quotationForm.value.companyName||! quotationForm.value.quotaNo || ! quotationForm.value.date"
+            <button type="button" mat-button [class.spinner]="loading"
+                    [disabled]="loading || ! quotationForm.value.contactBy || ! quotationForm.value.status||! quotationForm.value.designation ||! quotationForm.value.contactPerson || ! quotationForm.value.branchAddress ||! quotationForm.value.branchName || ! quotationForm.value.companyName||! quotationForm.value.quotaNo || ! quotationForm.value.date"
                     color="primary" *ngIf="!firstSubmit" (click)="updtQuotation()">Save and continue
             </button>
           </mat-action-row>
@@ -203,7 +203,6 @@
               Product Information
             </mat-panel-title>
           </mat-expansion-panel-header>
-
           <div formArrayName="productList"
                *ngFor="let product of quotationForm.get('productList')['controls']; let i=index" id="singleProduct">
             <div [formGroupName]="i">
@@ -284,7 +283,8 @@
                   <div class="input-group">
                     <mat-form-field class="qty">
                       <input matInput type="number" placeholder="Required Quantity" formControlName="productQty">
-                      <mat-error>Field is required</mat-error>
+                      <mat-error *ngIf="product.get('productQty').hasError('required')">Field is required</mat-error>
+                      <mat-error *ngIf="product.get('productQty').hasError('min')">Quantity must be greater than or equal to 1</mat-error>
                     </mat-form-field>
                   </div>
                 </div>
@@ -292,7 +292,8 @@
                   <div class="input-group">
                     <mat-form-field class="qty">
                       <input matInput type="number" placeholder="Available Quantity" formControlName="productQtyAvailable">
-                      <mat-error>Field is required</mat-error>
+                      <mat-error *ngIf="product.get('productQtyAvailable').hasError('required')">Field is required</mat-error>
+                      <mat-error *ngIf="product.get('productQtyAvailable').hasError('min')">Quantity must be greater than or equal to 1</mat-error>
                     </mat-form-field>
                   </div>
                 </div>
@@ -324,7 +325,8 @@
             </button>
           </div>
           <mat-action-row>
-            <button type="button" [disabled]="quotationForm.get('productList').invalid" mat-button color="primary"
+            <button type="button" [class.spinner]="loading"
+                    [disabled]="loading || quotationForm.get('productList').invalid" mat-button color="primary"
                     (click)="updtQuotation()">Next
             </button>
           </mat-action-row>
@@ -361,7 +363,8 @@
                   <div class="input-group">
                     <mat-form-field class="qty">
                       <input matInput type="number" placeholder="Unit price" formControlName="productPrice">
-                      <mat-error>Field is required</mat-error>
+                      <mat-error *ngIf="product.get('productPrice').hasError('required')">Field is required</mat-error>
+                      <mat-error *ngIf="product.get('productPrice').hasError('min')">Price can't be negative</mat-error>
                     </mat-form-field>
                   </div>
                 </div>
@@ -370,7 +373,8 @@
           </div>
           <mat-action-row>
             <button type="button" mat-button color="warn" (click)="prevStep()">Previous</button>
-            <button type="button" [disabled]="quotationForm.get('productList').invalid" mat-button color="primary"
+            <button type="button" [class.spinner]="loading"
+                    [disabled]="loading || quotationForm.get('productList').invalid" mat-button color="primary"
                     (click)="QuantityPricing()">Next
             </button>
           </mat-action-row>
@@ -475,8 +479,8 @@
           </div>
           <mat-action-row>
             <button mat-button type="button" color="warn" (click)="prevStep()">Previous</button>
-            <button mat-button type="button" color="primary"
-                    [disabled]="quotationForm.get('termsCondition').invalid || quotationForm.get('generatePdf').invalid"
+            <button mat-button type="button" color="primary" [class.spinner]="loading"
+                    [disabled]="loading || quotationForm.get('termsCondition').invalid || quotationForm.get('generatePdf').invalid"
                     (click)="updtQuotation()">Save
             </button>
           </mat-action-row>
