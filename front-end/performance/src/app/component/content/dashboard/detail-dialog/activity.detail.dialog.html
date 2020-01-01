@@ -1,0 +1,35 @@
+<h1 mat-dialog-title>Visiting detail of {{data.activityUserId}} at {{data.activityDate*1000|date}}</h1>
+<div mat-dialog-content>
+  <mat-card *ngFor="let visit of data.visit">
+    <mat-card-title>Visit purpose: {{visit.visitPurpose}}</mat-card-title>
+    <mat-card-subtitle>
+      <div class="row">
+        <div class="col-12 col-md-6 col-sm-12" style="padding: 0;">
+          <div>Company: {{visit.visitCompany}}</div>
+          <div>Branch: {{visit.visitCompanyBranch.branchName}}</div>
+        </div>
+        <div class="col-12 col-md-6 col-sm-12" style="padding: 0;text-align: center;">Category: {{visit.visitCategory}}</div>
+      </div>
+      <div>Address: {{visit.visitCompanyBranch.branchAddress}}</div>
+      <div>Contact Person: {{visit.visitCompanyPerson.personName}}({{visit.visitCompanyPerson.personDesignation}})</div>
+      <div>Contact Number: {{visit.visitCompanyPerson.personContactNumber}}</div>
+    </mat-card-subtitle>
+    <mat-card-content>
+      <div class="row">
+        <div class="col-12 col-md-6 col-sm-12" style="padding: 0;">
+          <mat-toolbar>Outcome</mat-toolbar>
+          <ol>
+            <li *ngFor="let oc of visit.visitOutCome">{{oc.outCome}}</li>
+          </ol>
+        </div>
+        <div class="col-12 col-md-6 col-sm-12" style="padding: 0;">
+          <mat-toolbar>Opportunity</mat-toolbar>
+          <ol>
+            <li *ngFor="let Vo of visit.visitOpportunity">{{Vo.opportunity}}</li>
+          </ol>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+<div mat-dialog-actions></div>

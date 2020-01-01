@@ -1,0 +1,21 @@
+.example-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.example-container > *, mat-form-field {
+  width: 100%;
+}
+.opportunity, .outcome {
+  padding: 5px;
+  border: 1px solid #76bcd3;
+}
+.addBtn {
+  text-align: center;
+}
+.opportunity{
+  background: #e2f1f6;
+}
+.outcome{
+  background: #d3dadc;
+}

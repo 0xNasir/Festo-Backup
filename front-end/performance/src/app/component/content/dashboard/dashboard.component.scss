@@ -1,0 +1,19 @@
+table {
+  width: 100%;
+}
+.userLink{
+  cursor: pointer;
+}
+.userLink:hover{
+  color: blue;
+}
+th{
+  min-width: 100px;
+}
+th:first-child{
+  min-width: 35px;
+  max-width: 50px;
+}
+th:nth-child(5){
+  min-width: 250px;
+}

@@ -1,0 +1,210 @@
+<h1 mat-dialog-title style="display: block;margin: -24px -24px 10px -24px;padding: 10px 24px;background: #3f51b5;color: #ffffff;">{{data.title}}</h1>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div mat-dialog-content>
+    <div class="example-container">
+      <mat-form-field>
+        <input matInput [matDatepicker]="picker" formControlName="activityDate" placeholder="Choose a date">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error>Date is required</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Activity Type</mat-label>
+        <mat-select formControlName="activityType" (selectionChange)="changeActivity(form.get('activityType').value)">
+          <mat-option *ngFor="let type of types" [value]="type">
+            {{type}}
+          </mat-option>
+        </mat-select>
+        <mat-error>Type is required</mat-error>
+      </mat-form-field>
+      <div *ngIf="choice==3">
+        <mat-form-field>
+          <input matInput placeholder="Company Name" aria-label="company" [matAutocomplete]="companyAuto" formControlName="activityClient" required (input)="companyInput($event.target.value)">
+          <mat-autocomplete #companyAuto="matAutocomplete">
+            <mat-option *ngFor="let c of company" [value]="c.companyName">
+              {{c.companyName}}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error>Field is required</mat-error>
+        </mat-form-field>
+        <div class="addBtn" *ngIf="showCompanyAddBtn">
+          <a href="http://192.168.0.254/client-management/app/client/add" target="_blank"><mat-icon>add</mat-icon></a>
+        </div>
+      </div>
+
+      <div *ngIf="choice==1||choice==3">
+        <div formArrayName="activityContent" *ngFor="let content of form.get('activityContent')['controls']; let j=index">
+          <div [formGroupName]="j">
+            <div class="row">
+              <div [class]="form.get('activityContent')['controls'].length>1?'example-container col-xs-10 col-sm-10 col-md-11 col-lg-11':'example-container col-xs-12 col-sm-12 col-md-12 col-lg-12'" style="padding-left: 0;padding-right: 0;">
+                <mat-form-field>
+                  <input matInput placeholder="Activity {{j+1}}" formControlName="contentDesc" required>
+                  <mat-error>Field is required</mat-error>
+                </mat-form-field>
+              </div>
+              <div *ngIf="form.get('activityContent')['controls'].length>1" class="col-xs-2 col-sm-2 col-md-1 col-lg-1">
+                <div class="box">
+                  <button mat-icon-button type="button" (click)="removeActivityContent(j)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="choice==2">
+        <div formArrayName="acivityVisit" *ngFor="let visit of form.get('acivityVisit')['controls']; let i=index">
+          <div [formGroupName]="i">
+            <h3 style="padding: 8px 25px;margin: 5px -24px;background: #607D8B;color: white;"><span>Visiting Information </span><button *ngIf="form.get('acivityVisit')['controls'].length>1" mat-button style="float: right;bottom: 10px;" color="accent" (click)="removeVisit(i)"><mat-icon>delete</mat-icon></button></h3>
+            <div class="example-container" style="width: 100%;;">
+              <mat-form-field>
+                <mat-label>Visit purpose</mat-label>
+                <mat-select formControlName="visitPurpose" required>
+                  <mat-option *ngFor="let purpose of purposes" [value]="purpose">
+                    {{purpose}}
+                  </mat-option>
+                </mat-select>
+                <mat-error>Field is required</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="row">
+              <div class="example-container col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding:0;">
+                <mat-form-field>
+                  <input matInput placeholder="Category" formControlName="visitCategory" required>
+                  <mat-error>Field is required</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="example-container col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-left: 0;padding-right: 0;">
+                <mat-form-field>
+                  <input matInput aria-label="company" [matAutocomplete]="companyAuto" placeholder="Company Name" formControlName="visitCompany" required (input)="companyInput($event.target.value)">
+                  <mat-autocomplete #companyAuto="matAutocomplete">
+                    <mat-option *ngFor="let c of company" [value]="c.companyName" (onSelectionChange)="selectCompany(c, i)">
+                      {{c.companyName}}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error>Field is required</mat-error>
+                </mat-form-field>
+                <div class="addBtn" *ngIf="showCompanyAddBtn">
+                  <a href="http://192.168.0.254/client-management/app/client/add" target="_blank"><mat-icon>add</mat-icon></a>
+                </div>
+              </div>
+              <div formGroupName="visitCompanyBranch" class="example-container col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-left: 0;padding-right: 0;">
+                <div class="row">
+                  <mat-form-field class="example-container col-xs-12 col-sm-12 col-md-6 col-lg-6" style="padding-left: 0;">
+                    <input matInput aria-label="branch" [matAutocomplete]="branchAuto" placeholder="Branch Name" formControlName="branchName" required>
+                    <mat-autocomplete #branchAuto="matAutocomplete">
+                      <mat-option *ngFor="let b of branch" [value]="b.branchName" (onSelectionChange)="selectBranch(b,i)">
+                        {{b.branchName}}
+                      </mat-option>
+                    </mat-autocomplete>
+                    <mat-error>Field is required</mat-error>
+                  </mat-form-field>
+                  <mat-form-field class="example-container col-xs-12 col-sm-12 col-md-6 col-lg-6" style="padding-left: 0;padding-right: 0;">
+                    <input matInput placeholder="Branch Address" formControlName="branchAddress" required>
+                    <mat-error>Field is required</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div formGroupName="visitCompanyPerson" class="example-container col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-left: 0;padding-right: 0;">
+                <div class="row">
+                  <mat-form-field class="example-container col-xs-12 col-sm-12 col-md-6 col-lg-6" style="padding-left: 0;">
+                    <input matInput aria-label="person" [matAutocomplete]="personAuto" placeholder="Person Name" formControlName="personName" required>
+                    <mat-autocomplete #personAuto="matAutocomplete">
+                      <mat-option *ngFor="let p of person" [value]="p.personName" (onSelectionChange)="selectPerson(p, i)">
+                        {{p.personName}}
+                      </mat-option>
+                    </mat-autocomplete>
+                    <mat-error>Field is required</mat-error>
+                  </mat-form-field>
+                  <mat-form-field class="example-container col-xs-12 col-sm-12 col-md-6 col-lg-6" style="padding-left: 0;padding-right: 0;">
+                    <input matInput [matAutocomplete]="personAuto" placeholder="Person Contact Number" formControlName="personContactNumber" required>
+                    <mat-error>Field is required</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+
+            <div class="outcome" style="margin-bottom: 10px;">
+              <div formArrayName="visitOutcome" *ngFor="let outcome of visit.get('visitOutcome')['controls']; let j=index">
+                <div [formGroupName]="j">
+                  <div class="row">
+                    <div [class]="visit.get('visitOutcome').length>1?'example-container col-xs-10 col-sm-10 col-md-11 col-lg-11':'example-container col-xs-12 col-sm-12 col-md-12 col-lg-12'" style="padding-left: 0;">
+                      <mat-form-field>
+                        <input matInput placeholder="Outcome {{j+1}}" formControlName="outCome" required>
+                        <mat-error>Field is required</mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div *ngIf="visit.get('visitOutcome').length>1" class="col-xs-2 col-sm-2 col-md-1 col-lg-1">
+                      <div class="box">
+                        <button mat-icon-button type="button" (click)="removeOutCome(visit, j)">
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                Add new outcome?
+                <button [disabled]="visit.get('visitOutcome').invalid" mat-icon-button type="button" (click)="makeNewOutCome(visit)">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+            </div>
+
+            <div class="opportunity">
+              <div formArrayName="visitOpportunities" *ngFor="let opportunity of visit.get('visitOpportunities')['controls']; let k=index">
+                <div [formGroupName]="k">
+                  <div class="row">
+                    <div [class]="visit.get('visitOpportunities').length>1?'example-container col-xs-10 col-sm-10 col-md-11 col-lg-11':'example-container col-xs-12 col-sm-12 col-md-12 col-lg-12'" style="padding-left: 0;">
+                      <mat-form-field>
+                        <mat-label>Opportunity {{k+1}}</mat-label>
+                        <mat-select formControlName="opportunity" required>
+                          <mat-option *ngFor="let opportunity of opportunities" [value]="opportunity.partnerName">
+                            {{opportunity.partnerName}}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error>Field is required</mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div *ngIf="visit.get('visitOpportunities').length>1" class="col-xs-2 col-sm-2 col-md-1 col-lg-1">
+                      <div class="box">
+                        <button mat-icon-button type="button" (click)="removeOpportunity(visit, k)">
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="action-btn">
+                Add new opportunity?
+                <button [disabled]="visit.get('visitOpportunities').invalid" mat-icon-button type="button" (click)="makeNewOpportunity(visit)">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          Add new visit?
+          <button mat-icon-button [disabled]="form.get('acivityVisit').invalid" type="button" (click)="makeNewVisit()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </div>
+
+    </div>
+    <div *ngIf="choice==1||choice==3">
+      Add new activity?
+      <button mat-icon-button [disabled]="form.get('activityContent').invalid" type="button" (click)="makeNewActivityContent()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-flat-button color="primary">Save</button>
+  </div>
+</form>

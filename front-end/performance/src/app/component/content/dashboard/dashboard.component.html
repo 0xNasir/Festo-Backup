@@ -1,0 +1,105 @@
+<mat-toolbar style="padding: 0px;">
+  <span>
+    <button mat-icon-button (click)="location.back()"><mat-icon>keyboard_arrow_left</mat-icon></button>
+    <span *ngIf="meta=='dashboard'">Manage Performance Record</span>
+    <span *ngIf="meta=='workall'">Total work performance</span>
+    <span *ngIf="meta=='individual'">Performance of {{urlParam}}</span>
+  </span>
+  <span class="fill-remaining-space"></span>
+  <span>
+    <mat-form-field floatLabel="never" style="margin-right: 10px;">
+        <mat-label>All</mat-label>
+        <mat-select (selectionChange)="filterByType(status)" [(ngModel)]="status">
+          <mat-option *ngFor="let type of types" value="{{type}}">{{type}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+  </span>
+  <mat-form-field floatLabel="never" *ngIf="meta=='dashboard'">
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter by name">
+  </mat-form-field>
+  <span *ngIf="meta=='dashboard'"><button mat-mini-fab (click)="openActivityDialog(null,true)"><mat-icon>add</mat-icon></button></span>
+  <small *ngIf="meta=='individual' || meta=='workall'" style="margin-right: 10px;">
+    From:
+    <mat-form-field class="fromDate" style="width: 120px;" floatLabel="never">
+      <input matInput [matDatepicker]="picker" name="fromDate" [(ngModel)]="filterData.fromDate"
+             placeholder="Choose a date" (dateChange)="filterByDate(filterData)">
+      <mat-datepicker-toggle matSuffix [for]="picker" matTooltip="Select From Date"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    To:
+    <mat-form-field class="toDate" style="width: 120px;" floatLabel="never">
+      <input matInput [matDatepicker]="picker2" name="toData" [(ngModel)]="filterData.toDate"
+             placeholder="Choose a date" (dateChange)="filterByDate(filterData)">
+      <mat-datepicker-toggle matSuffix [for]="picker2" matTooltip="Select To Date"></mat-datepicker-toggle>
+      <mat-datepicker #picker2></mat-datepicker>
+    </mat-form-field>
+  </small>
+</mat-toolbar>
+<div *ngIf="!loadedPage" style="width: 100%;margin: 50px 45%;"><mat-spinner></mat-spinner></div>
+<div *ngIf="loadedPage">
+  <div class="mat-elevation-z8" *ngIf="showContent" style="overflow-x: auto;">
+    <table mat-table [dataSource]="dataSource">
+
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> No. </th>
+        <td mat-cell *matCellDef="let element;let i=index"> {{i+1}} </td>
+      </ng-container>
+      <ng-container matColumnDef="name" *ngIf="(meta=='dashboard'||meta=='workall')&&user.permission.wp.wp_other">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell class="userLink" *matCellDef="let element" (click)="router.navigate(['staff/',element.activityUserId])"> {{element.activityUserId}} </td>
+      </ng-container>
+      <ng-container matColumnDef="name" *ngIf="(meta=='dashboard'||meta=='workall')&&!user.permission.wp.wp_other">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.activityUserId}} </td>
+      </ng-container>
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef> Type </th>
+        <td mat-cell *matCellDef="let element"> {{element.activityType}} </td>
+      </ng-container>
+      <ng-container matColumnDef="company">
+        <th mat-header-cell *matHeaderCellDef> Company </th>
+        <td mat-cell *matCellDef="let element">
+        <span *ngIf="element.activityType=='Visit'">
+          <span *ngFor="let v of element.visit">{{v.visitCompany}} <span *ngIf="element.visit.length>1"><br></span></span>
+        </span>
+          <span *ngIf="element.activityType=='Project in-house development'">{{element.activityCompany}}</span>
+          <span *ngIf="element.activityType=='Office work'">-</span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="activity">
+        <th mat-header-cell *matHeaderCellDef> Activity </th>
+        <td mat-cell *matCellDef="let element">
+        <span *ngIf="element.activityType=='Visit'">
+          <span *ngFor="let visit of element.visit">
+            <span *ngFor="let v of visit.visitOutCome;let u=index;">
+              <span>{{u+1}}. <span style="margin-left: 10px;">{{v.outCome}}</span><br></span>
+            </span>
+          </span>
+        </span>
+          <span *ngIf="element.activityType!='Visit'">
+          <span *ngFor="let x of element.activityContent;let u=index;">{{u+1}}. <span style="margin-left: 10px;">{{x.contentDesc}}</span><br></span>
+        </span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef> Date </th>
+        <td mat-cell *matCellDef="let element"> {{element.activityDate*1000|date}} </td>
+      </ng-container>
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef> Action </th>
+        <td mat-cell *matCellDef="let element">
+          <button *ngIf="user.user.username==element.activityUserId" mat-icon-button color="accent" (click)="deleteActivity(element.activityId)"><mat-icon>delete</mat-icon></button>
+          <button *ngIf="user.user.username==element.activityUserId" mat-icon-button (click)="openActivityDialog(element,false)"><mat-icon>edit</mat-icon></button>
+          <button *ngIf="element.activityType=='Visit'" mat-icon-button (click)="openDetailDialog(element)"><mat-icon>remove_red_eye</mat-icon></button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[20, 50, 100, 200, 500]" showFirstLastButtons></mat-paginator>
+  </div>
+  <div *ngIf="!showContent">
+    <h2 style="font-weight: 200;"><strong>Sorry!</strong> {{repMsg}}</h2>
+  </div>
+</div>
