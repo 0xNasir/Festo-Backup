@@ -6,6 +6,7 @@ import {UpdateProductComponent} from './component/update-product/update-product.
 import {AuthGuard} from './security/auth-guard';
 import {PageNotFoundComponent} from './component/page-not-found/page-not-found.component';
 import {DashboardComponent} from './component/dashboard/dashboard.component';
+import {NotificationComponent} from './component/notification/notification.component';
 
 
 const routes: Routes = [
@@ -14,6 +15,7 @@ const routes: Routes = [
   {path: 'products/:param', component: ManageProductComponent, canActivate: [AuthGuard]},
   {path: 'product/add', component: AddProductComponent, canActivate: [AuthGuard]},
   {path: 'product/update/:id', component: UpdateProductComponent, canActivate: [AuthGuard]},
+  {path: 'notification', component: NotificationComponent, canActivate: [AuthGuard]},
   {path: '**', component: PageNotFoundComponent}
 ];
 

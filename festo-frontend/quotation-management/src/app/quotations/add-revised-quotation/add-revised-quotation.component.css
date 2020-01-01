@@ -20,7 +20,9 @@
   border: 1px solid #D7CFAE;
   background: #e9eef1;
 }
-
+mat-spinner {
+  margin: 0 auto;
+}
 
 
 /*Animation for spinner on button*/

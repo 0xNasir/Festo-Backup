@@ -20,6 +20,7 @@ import {QuotaStatus} from '../update-quotation/update-quotation.component';
   styleUrls: ['./add-revised-quotation.component.css']
 })
 export class AddRevisedQuotationComponent implements OnInit {
+  public showSpinner = true;
   iteration: number;
   showAddPersonLink: boolean;
   showAddCompanyLink: boolean;
@@ -27,7 +28,7 @@ export class AddRevisedQuotationComponent implements OnInit {
   companyId: string;
   branchId: string;
   updateQuotationForm: FormGroup;
-  quotation: Quotations;
+  public quotation: Quotations;
   progressValue: number;
   SearchProduct: Products[];
   branch: Branch[];
@@ -41,10 +42,13 @@ export class AddRevisedQuotationComponent implements OnInit {
   filteredBranch: Branch[];
   filteredContact: Contact[];
   quotaStatus: QuotaStatus[] = [
+    {value: 'Preparing'},
+    {value: 'Ready'},
+    {value: 'Pending'},
     {value: 'Win'},
-    {value: 'Loss'},
-    {value: 'Pending'}
+    {value: 'Loss'}
   ];
+  public units = ['pcs', 'pc', 'mtr', 'ft', 'set', 'ltr'];
   public permission: any;
   public allUser: any;
   public step = 0;
@@ -65,7 +69,7 @@ export class AddRevisedQuotationComponent implements OnInit {
               private snackBar: MatSnackBar,
               public location: Location,
               public dialog: MatDialog,
-              private router: Router) {
+              public router: Router) {
     this.permission = AuthService.permission;
     if (!this.permission.qms.qms_update) {
       this.router.navigate(['404']);
@@ -79,6 +83,7 @@ export class AddRevisedQuotationComponent implements OnInit {
     this.activatedRoute.paramMap.subscribe(params => {
       this.id = params.get('id');
       this.quotationService.getSingleQuotation(this.id).subscribe(quotationData => {
+        this.showSpinner = false;
         this.quotation = quotationData;
         const productArray = this.fb.array([]);
         if (this.quotation.productList.length === 0) {
@@ -93,6 +98,7 @@ export class AddRevisedQuotationComponent implements OnInit {
             productType: [prdt.productType, Validators.required],
             productQty: [prdt.productQty, [Validators.required, Validators.min(1)]],
             productQtyAvailable: [prdt.productQtyAvailable, [Validators.required, Validators.min(0)]],
+            productUnit: [prdt.productUnit, Validators.required],
             productPrice: [prdt.productPrice, [Validators.required, Validators.min(0)]],
             productDescription: [prdt.productDescription]
           }));
@@ -125,6 +131,8 @@ export class AddRevisedQuotationComponent implements OnInit {
           designation: this.quotation.designation,
           status: this.quotation.status,
           contactBy: this.quotation.contactBy,
+          contactByUserId: this.quotation.contactByUserId,
+          contactByUsername: this.quotation.contactByUsername,
           contactByDesignation: this.quotation.contactByDesignation,
           contactByPhone: this.quotation.contactByPhone,
           remarks: this.quotation.remarks,
@@ -165,6 +173,8 @@ export class AddRevisedQuotationComponent implements OnInit {
       designation: ['', Validators.required],
       status: ['', Validators.required],
       contactBy: ['', Validators.required],
+      contactByUserId: ['', Validators.required],
+      contactByUsername: ['', Validators.required],
       contactByDesignation: ['', Validators.required],
       contactByPhone: ['', Validators.required],
       remarks: [''],
@@ -203,6 +213,7 @@ export class AddRevisedQuotationComponent implements OnInit {
       productType: ['', Validators.required],
       productQty: ['', [Validators.required, Validators.min(1)]],
       productQtyAvailable: ['', [Validators.required, Validators.min(0)]],
+      productUnit: ['', Validators.required],
       productPrice: ['', [Validators.required, Validators.min(0)]],
       productDescription: ['', Validators.required]
     });
@@ -267,6 +278,7 @@ export class AddRevisedQuotationComponent implements OnInit {
       productType: [prdt.productType, Validators.required],
       productQty: [1, Validators.required],
       productQtyAvailable: [1, Validators.required],
+      productUnit: ['', Validators.required],
       productPrice: [prdt.productPrice, Validators.required],
       productDescription: [prdt.productDescription, Validators.required]
     }));
@@ -412,6 +424,8 @@ export class AddRevisedQuotationComponent implements OnInit {
   }
 
   selectContactBy(user: any) {
+    this.updateQuotationForm.get('contactByUserId').setValue(user.userId);
+    this.updateQuotationForm.get('contactByUsername').setValue(user.username);
     this.updateQuotationForm.get('contactByDesignation').setValue(user.designations[0].title);
     this.updateQuotationForm.get('contactByPhone').setValue(user.phones[0].number);
   }

@@ -8,13 +8,16 @@
     </div>
     <div>
       <div *ngIf="!isHandset">
+        <div mat-dialog-content *ngIf="showAnalyze">
+          <input type="file" #uploads (change)="DataAnalyze(uploads.files)">
+        </div>
         <button *ngIf="permission.pms.pms_import_csv" mat-button (click)="ImportFromCSV()">
           Import from CSV
         </button>
         <button *ngIf="permission.pms.pms_generate_csv && showExporZeroPriceProduct" mat-button (click)="saveAsCSV()">
           Export as CSV
         </button>
-        <button *ngIf="showExporZeroPriceProduct" mat-button (click)="router.navigate(['products/zero-price'])">
+        <button *ngIf="permission.pms.pms_price_log" mat-button (click)="router.navigate(['products/zero-price'])">
           Zero-price products
         </button>
         <mat-form-field floatLabel="never" style="max-width: 120px;min-width: 105px;margin-right: 10px;">
@@ -119,7 +122,7 @@
 
   <mat-card>
     <mat-card-content>
-      <div style="float: right;">
+      <div *ngIf="!showSpinner" style="float: right;">
         <span *ngIf="selectedProduct">
           <button mat-icon-button *ngIf="selectedProduct.productDescription.length>50 && selectedProduct.productId==clickedDiv" color="accent" (click)="openProductList(selectedProduct.productDescription)"><i
             class="material-icons">
@@ -141,7 +144,12 @@
           <mat-icon aria-hidden="false" aria-label="edit icon">edit</mat-icon>
         </button>
       </div>
-      <table mat-table [dataSource]="product" class="mat-elevation-z8 table-responsive" matSort>
+
+      <div class="sinner">
+        <mat-spinner *ngIf="showSpinner"></mat-spinner>
+      </div>
+
+      <table *ngIf="!showSpinner" mat-table [dataSource]="product" class="mat-elevation-z8 table-responsive" matSort>
 
         <ng-container matColumnDef="id">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> ID</th>
@@ -178,7 +186,7 @@
             <span *ngIf="element.productDescription.length<=50">{{element.productDescription}}</span>
           </td>
         </ng-container>
-        <ng-container matColumnDef="price">
+        <ng-container matColumnDef="price" *ngIf="permission.pms.pms_price_log">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Price</th>
           <td mat-cell *matCellDef="let element"> {{MoneyFormat(element.productPrice)}}</td>
         </ng-container>
@@ -201,6 +209,10 @@
         <ng-container matColumnDef="origin">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Origin</th>
           <td mat-cell *matCellDef="let element"> {{element.productOrigin}}</td>
+        </ng-container>
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Date</th>
+          <td mat-cell *matCellDef="let element"> {{element.productAddedOn*1000|date}}</td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

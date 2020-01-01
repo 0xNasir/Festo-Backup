@@ -10,3 +10,6 @@ html, body{
 button:focus {
   outline: none;
 }
+mat-spinner {
+  margin: 0 auto;
+}

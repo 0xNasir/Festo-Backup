@@ -29,9 +29,8 @@
                       add
                     </i>
                   </button>
-                  <button mat-icon-button *ngIf="form.get('branch')['controls'].length>1" color="warn" type="button" (click)="removeBranch(i)"><i class="material-icons">
-                    delete
-                  </i></button>
+                  <button mat-icon-button *ngIf="form.get('branch')['controls'].length>1" color="warn" type="button" (click)="removeBranch(i)">
+                    <i class="material-icons">delete</i></button>
                 </div>
               </div>
             </div>

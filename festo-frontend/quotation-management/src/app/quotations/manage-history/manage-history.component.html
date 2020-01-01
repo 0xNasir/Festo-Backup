@@ -9,8 +9,8 @@
   </mat-toolbar>
   <mat-card>
     <mat-card-content>
-
-      <table mat-table [dataSource]="historyArray" class="mat-elevation-z8 table-responsive" matSort>
+      <mat-spinner *ngIf="showSpinner"></mat-spinner>
+      <table *ngIf="!showSpinner" mat-table [dataSource]="historyArray" class="mat-elevation-z8 table-responsive" matSort>
 
         <ng-container matColumnDef="id">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>

@@ -42,4 +42,8 @@ export class ProductService {
   importProduct(data): Observable<any> {
     return this.httpClient.put(Travel.productURL + '?api=base/import', data);
   }
+
+  updateEmergencyProductUpdate(data: any): Observable<any> {
+    return this.httpClient.put(Travel.productURL + '?api=base/updateEmergencyProductPrice', data);
+  }
 }

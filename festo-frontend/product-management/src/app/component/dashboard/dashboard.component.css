@@ -10,3 +10,6 @@ p.d-data{
   background: #125956;
   color: white;
 }
+mat-spinner{
+  margin: 100px auto;
+}

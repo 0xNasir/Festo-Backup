@@ -26,7 +26,7 @@ export interface QuotaStatus {
 
 export class AddQuotationComponent implements OnInit {
   step = 0;
-  allUser: any;
+  public allUser: any;
   firstStatusSelection: boolean;
   firstRemarksInput: boolean;
   firstCompanySelect: boolean;
@@ -42,6 +42,7 @@ export class AddQuotationComponent implements OnInit {
   allChar: string[] = [
     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
   ];
+  public units = ['pcs', 'pc', 'mtr', 'ft', 'set', 'ltr'];
   firstSubmit = true;
 
   showAddCompanyLink: boolean;
@@ -56,9 +57,11 @@ export class AddQuotationComponent implements OnInit {
   managedPersonId: string;
   contact: Contact[];
   quotaStatus: QuotaStatus[] = [
+    {value: 'Preparing'},
+    {value: 'Ready'},
+    {value: 'Pending'},
     {value: 'Win'},
-    {value: 'Loss'},
-    {value: 'Pending'}
+    {value: 'Loss'}
   ];
 
   private userData: any;
@@ -175,6 +178,8 @@ export class AddQuotationComponent implements OnInit {
       designation: ['', Validators.required],
       status: ['', Validators.required],
       contactBy: [this.userData.fullName, Validators.required],
+      contactByUserId: [this.userData.userId, Validators.required],
+      contactByUsername: [this.userData.username, Validators.required],
       contactByDesignation: [this.userData.userDesignation, Validators.required],
       contactByPhone: [this.userData.userPhone, Validators.required],
       remarks: [''],
@@ -212,6 +217,7 @@ export class AddQuotationComponent implements OnInit {
       internalPartNumber: ['', Validators.required],
       productType: ['', Validators.required],
       productQty: ['', [Validators.required, Validators.min(1), Validators.pattern('^(?=.*\\d)')]],
+      productUnit: ['', Validators.required],
       productQtyAvailable: ['', [Validators.required, Validators.min(0)]],
       productPrice: ['', [Validators.required, Validators.min(0)]],
       productDescription: ['', Validators.required]
@@ -225,7 +231,7 @@ export class AddQuotationComponent implements OnInit {
       pdfBody: ['Dear Sir,<br>' +
       'As desired, please find below our quotations for Festo Pneumatic ' +
       'Components for favourable evaluation at your end.', Validators.required],
-      pdfVat: [0, Validators.required],
+      pdfVat: [7.5, Validators.required],
       suggestion: ['We look forward to being favored with your valuable order in due course.<br>' +
       'Should you require any other information, please do not hesitate to contact us.', Validators.required]
     });
@@ -445,6 +451,7 @@ export class AddQuotationComponent implements OnInit {
       productType: [prdt.productType, Validators.required],
       productQty: [1, [Validators.required, Validators.min(1)]],
       productQtyAvailable: [1, [Validators.required, Validators.min(0)]],
+      productUnit: ['', [Validators.required, Validators.min(0)]],
       productPrice: [prdt.productPrice, [Validators.required, Validators.min(0)]],
       productDescription: [prdt.productDescription, Validators.required]
     }));
@@ -547,6 +554,8 @@ export class AddQuotationComponent implements OnInit {
   }
 
   selectContactBy(user: any) {
+    this.quotationForm.get('contactByUserId').setValue(user.userId);
+    this.quotationForm.get('contactByUsername').setValue(user.username);
     this.quotationForm.get('contactByDesignation').setValue(user.designations[0].title);
     this.quotationForm.get('contactByPhone').setValue(user.phones[0].number);
   }

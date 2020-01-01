@@ -18,6 +18,10 @@ export class UpdateProductComponent implements OnInit {
   product: Product;
   permission: any;
   dirty: boolean;
+  public categories = ['Plastic Tubing', 'Pneumatic Fitting & Connector', 'Valves', 'Valves - Special', 'Coil',
+    'Linear Cylinders', 'Rotary Cylinders', 'Filter Regulator', 'Service Unit', 'Filter', 'Filter Cartridge',
+    'Pressure Regulator', 'Media Sensors', 'Position Sensors', 'Vacuum Generator', 'Suction Cup' +
+    'Pressure Switch', 'Silencer', 'Others'];
 
   constructor(
     private fb: FormBuilder,
@@ -73,7 +77,7 @@ export class UpdateProductComponent implements OnInit {
       productUuq: [0, [Validators.required, Validators.min(0)]],
       productLoan: [0, [Validators.required, Validators.min(0)]],
       productBooking: [0, [Validators.required, Validators.min(0)]],
-      productOrigin: ['', Validators.required]
+      productOrigin: ['']
     });
   }
 

@@ -18,7 +18,7 @@ import {
   MatCardModule, MatDialogModule,
   MatFormFieldModule,
   MatInputModule,
-  MatPaginatorModule,
+  MatPaginatorModule, MatProgressSpinnerModule,
   MatSelectModule,
   MatSnackBarModule, MatSortModule, MatTooltipModule
 } from '@angular/material';
@@ -32,6 +32,8 @@ import { PageNotFoundComponent } from './component/page-not-found/page-not-found
 import { DashboardComponent } from './component/dashboard/dashboard.component';
 import {RevisionDialogComponent} from './dialog/product-revision/revision.dialog.component';
 import {ImportDialogComponent} from './dialog/import/import.dialog.component';
+import { NotificationComponent } from './component/notification/notification.component';
+import {EmergencyProductPriceDialogComponent} from './component/notification/update-popup/emergency.product.price.dialog.component';
 
 @NgModule({
   declarations: [
@@ -44,12 +46,15 @@ import {ImportDialogComponent} from './dialog/import/import.dialog.component';
     PageNotFoundComponent,
     DashboardComponent,
     RevisionDialogComponent,
-    ImportDialogComponent
+    ImportDialogComponent,
+    NotificationComponent,
+    EmergencyProductPriceDialogComponent
   ],
   entryComponents: [
     ProductDialogComponent,
     RevisionDialogComponent,
-    ImportDialogComponent
+    ImportDialogComponent,
+    EmergencyProductPriceDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -74,7 +79,8 @@ import {ImportDialogComponent} from './dialog/import/import.dialog.component';
     MatSelectModule,
     MatDialogModule,
     MatMenuModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatProgressSpinnerModule
   ],
   providers: [AuthGuard],
   bootstrap: [AppComponent]

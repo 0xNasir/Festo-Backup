@@ -35,7 +35,12 @@
         <div class="col-md-6">
           <div class="input-group">
             <mat-form-field class="category">
-              <input matInput placeholder="Category" type="text" formControlName="productCategory" required>
+              <mat-label>Category</mat-label>
+              <mat-select formControlName="productCategory" required>
+                <mat-option *ngFor="let category of categories" [value]="category">
+                  {{category}}
+                </mat-option>
+              </mat-select>
               <mat-error>Field is required</mat-error>
             </mat-form-field>
           </div>
@@ -70,8 +75,7 @@
         <div class="col-md-3">
           <div class="input-group">
             <mat-form-field class="origin">
-              <input matInput placeholder="Country of origin" type="text" formControlName="productOrigin" required>
-              <mat-error>Field is required</mat-error>
+              <input matInput placeholder="Country of origin" type="text" formControlName="productOrigin">
             </mat-form-field>
           </div>
         </div>

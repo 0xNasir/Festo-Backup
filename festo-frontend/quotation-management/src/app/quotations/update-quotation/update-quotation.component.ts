@@ -24,6 +24,7 @@ export interface QuotaStatus {
 })
 
 export class UpdateQuotationComponent implements OnInit {
+  public showSpinner = true;
   historyId: number;
   public loading: boolean;
   showAddPersonLink: boolean;
@@ -32,7 +33,7 @@ export class UpdateQuotationComponent implements OnInit {
   companyId: string;
   branchId: string;
   updateQuotationForm: FormGroup;
-  quotation: Quotations;
+  public quotation: Quotations;
   progressValue: number;
   SearchProduct: Products[];
   branch: Branch[];
@@ -42,13 +43,15 @@ export class UpdateQuotationComponent implements OnInit {
   contact: Contact[];
   showAddProductLink1: boolean;
   showAddProductLink2: boolean;
-
+  public units = ['pcs', 'pc', 'mtr', 'ft', 'set', 'ltr'];
   filteredBranch: Branch[];
   filteredContact: Contact[];
   quotaStatus: QuotaStatus[] = [
+    {value: 'Preparing'},
+    {value: 'Ready'},
+    {value: 'Pending'},
     {value: 'Win'},
-    {value: 'Loss'},
-    {value: 'Pending'}
+    {value: 'Loss'}
   ];
   public permission: any;
   public allUser: any;
@@ -69,7 +72,7 @@ export class UpdateQuotationComponent implements OnInit {
               private snackBar: MatSnackBar,
               public location: Location,
               public dialog: MatDialog,
-              private router: Router) {
+              public router: Router) {
     this.permission = AuthService.permission;
     if (!this.permission.qms.qms_update) {
       this.router.navigate(['404']);
@@ -83,6 +86,7 @@ export class UpdateQuotationComponent implements OnInit {
     this.activatedRoute.paramMap.subscribe(params => {
       this.id = params.get('id');
       this.quotationService.getSingleQuotation(this.id).subscribe(quotationData => {
+        this.showSpinner = false;
         this.quotation = quotationData;
         const productArray = this.fb.array([]);
         if (this.quotation.productList.length === 0) {
@@ -97,6 +101,7 @@ export class UpdateQuotationComponent implements OnInit {
             productType: [prdt.productType, Validators.required],
             productQty: [prdt.productQty, Validators.required],
             productQtyAvailable: [prdt.productQtyAvailable, Validators.required],
+            productUnit: [prdt.productUnit, Validators.required],
             productPrice: [prdt.productPrice, Validators.required],
             productDescription: [prdt.productDescription, Validators.required],
             totalPrice: [prdt.productQty * prdt.productPrice, Validators.required]
@@ -130,6 +135,8 @@ export class UpdateQuotationComponent implements OnInit {
           designation: this.quotation.designation,
           status: this.quotation.status,
           contactBy: this.quotation.contactBy,
+          contactByUserId: this.quotation.contactByUserId,
+          contactByUsername: this.quotation.contactByUsername,
           contactByDesignation: this.quotation.contactByDesignation,
           contactByPhone: this.quotation.contactByPhone,
           remarks: this.quotation.remarks,
@@ -170,6 +177,8 @@ export class UpdateQuotationComponent implements OnInit {
       designation: ['', Validators.required],
       status: ['', Validators.required],
       contactBy: ['', Validators.required],
+      contactByUserId: ['', Validators.required],
+      contactByUsername: ['', Validators.required],
       contactByDesignation: ['', Validators.required],
       contactByPhone: ['', Validators.required],
       remarks: [''],
@@ -208,6 +217,7 @@ export class UpdateQuotationComponent implements OnInit {
       productType: ['', Validators.required],
       productQty: [1, Validators.required],
       productQtyAvailable: [1, Validators.required],
+      productUnit: ['', Validators.required],
       productPrice: ['', Validators.required],
       productDescription: ['', Validators.required],
       totalPrice: [null]
@@ -284,6 +294,7 @@ export class UpdateQuotationComponent implements OnInit {
       productType: [prdt.productType, Validators.required],
       productQty: [productQty],
       productQtyAvailable: [productQty],
+      productQtyUnit: ['', Validators.required],
       productPrice: [prdt.productPrice, Validators.required],
       productDescription: [prdt.productDescription, Validators.required],
       totalPrice: [productQty * prdt.productPrice]
@@ -428,6 +439,8 @@ export class UpdateQuotationComponent implements OnInit {
   }
 
   selectContactBy(user: any) {
+    this.updateQuotationForm.get('contactByUserId').setValue(user.userId);
+    this.updateQuotationForm.get('contactByUsername').setValue(user.username);
     this.updateQuotationForm.get('contactByDesignation').setValue(user.designations[0].title);
     this.updateQuotationForm.get('contactByPhone').setValue(user.phones[0].number);
   }

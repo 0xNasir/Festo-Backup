@@ -1,5 +1,8 @@
 <div class="container">
-  <div class="row">
+  <div class="sinner">
+    <mat-spinner *ngIf="showSpinner"></mat-spinner>
+  </div>
+  <div *ngIf="!showSpinner" class="row">
     <div class="col-md-4">
       <mat-card class="example-card">
         <mat-card-header>
@@ -60,6 +63,19 @@
         <mat-card-content>
           <p class="d-data">
             {{dashboardData.inStockProduct}}
+          </p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div class="col-md-4" *ngIf="permission.pms.pms_notification">
+      <mat-card class="example-card">
+        <mat-card-header>
+          <div mat-card-avatar class="example-header-image"></div>
+          <mat-card-title>Emergency product</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p class="d-data">
+            {{notificationCounter}}
           </p>
         </mat-card-content>
       </mat-card>

@@ -5,9 +5,14 @@
     </button>
     Update quotation
   </mat-toolbar>
-
-  <mat-card>
-    <form class="example-form" [formGroup]="updateQuotationForm">
+  <mat-card *ngIf="showSpinner">
+    <mat-spinner></mat-spinner>
+  </mat-card>
+  <mat-card *ngIf="!showSpinner">
+    <div *ngIf="quotation.printCount>0">
+      This quotation is already printed. You can't update anymore. You can <span style="color: #1c25fd; cursor: pointer; font-weight: 800; font-size: 25px" (click)="router.navigate(['/quotation/revise/'+quotation.id+'/add'])">revise</span> now.
+    </div>
+    <form *ngIf="quotation.printCount==0" class="example-form" [formGroup]="updateQuotationForm">
       <mat-accordion class="example-headers-align">
         <mat-expansion-panel [disabled]="true" [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
           <mat-expansion-panel-header>
@@ -167,10 +172,18 @@
                 </mat-form-field>
               </div>
             </div>
-            <div class="col-md-12">
+            <div class="col-md-6">
               <div class="input-group">
                 <mat-form-field class="remarks">
                   <input matInput placeholder="Remarks" formControlName="remarks">
+                  <mat-error>Field is required</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="input-group">
+                <mat-form-field class="remarks">
+                  <input matInput placeholder="PR Reference" formControlName="quotaRef">
                   <mat-error>Field is required</mat-error>
                 </mat-form-field>
               </div>
@@ -196,7 +209,7 @@
                *ngFor="let product of updateQuotationForm.get('productList')['controls']; let i=index">
             <div [formGroupName]="i">
               <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                   <div class="input-group">
                     <mat-form-field class="product-name">
                       <input matInput #thisStatus placeholder="Product Name" [matAutocomplete]="pName"
@@ -217,7 +230,7 @@
                   </span>
                   </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                   <div class="input-group">
                     <mat-form-field class="part-number">
                       <input matInput placeholder="Part No" [matAutocomplete]="part" aria-label="State"
@@ -280,6 +293,19 @@
                   <div class="input-group">
                     <mat-form-field class="qty">
                       <input matInput type="number" placeholder="Available Quantity" formControlName="productQtyAvailable">
+                      <mat-error>Field is required</mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="input-group">
+                    <mat-form-field class="unit">
+                      <input matInput placeholder="Product Unit" aria-label="unit" formControlName="productUnit" [matAutocomplete]="auto">
+                      <mat-autocomplete #auto="matAutocomplete">
+                        <mat-option *ngFor="let unit of units" [value]="unit">
+                          {{unit}}
+                        </mat-option>
+                      </mat-autocomplete>
                       <mat-error>Field is required</mat-error>
                     </mat-form-field>
                   </div>

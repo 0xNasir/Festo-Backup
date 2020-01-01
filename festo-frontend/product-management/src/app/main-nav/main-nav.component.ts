@@ -4,6 +4,7 @@ import {AppList, User, UserInfo} from '../plain-object/user';
 import {AuthService} from '../service/auth.service';
 import {Router} from '@angular/router';
 import {Travel} from '../service/travel';
+import {NotificationService} from '../service/notification.service';
 
 @Component({
   selector: 'app-main-nav',
@@ -11,6 +12,7 @@ import {Travel} from '../service/travel';
   styleUrls: ['./main-nav.component.css']
 })
 export class MainNavComponent implements OnInit {
+  public showNotificationIcon: boolean;
   userInfo: UserInfo = {
     fullName: '',
     userId: '',
@@ -25,29 +27,33 @@ export class MainNavComponent implements OnInit {
     remark: '',
     disabled: null
   }];
-  user: User = {
+  public user: User = {
     user: this.userInfo,
     permission: '',
     primeAccess: '',
     appList: this.appList
   };
   isHandset: boolean;
+  notificationCounter: number;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
     private authService: AuthService,
+    private notificationService: NotificationService,
     public router: Router
   ) {
-    this.getUserInfo();
   }
 
   ngOnInit(): void {
     this.onResize(event);
+    this.getUserInfo();
+    this.loadNotification();
   }
 
   getUserInfo() {
     this.authService.loggedInUserInfo().subscribe(data => {
       this.user = data;
+      this.showNotificationIcon = this.user.permission.pms.pms_notification;
       if (!this.user.permission.pms) {
         document.location.href = Travel.authURL;
       }
@@ -69,5 +75,13 @@ export class MainNavComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.isHandset = window.innerWidth < 800;
+  }
+
+  loadNotification() {
+    this.notificationService.getNotification().subscribe(data => {
+      this.notificationService.zeroPriceEmergencyData(data).subscribe(dts => {
+        this.notificationCounter = dts.length;
+      });
+    });
   }
 }

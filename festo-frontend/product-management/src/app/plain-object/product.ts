@@ -13,6 +13,7 @@ export class Product {
   productPriceRevision: PriceRevision[];
   productQuantityRevision: QuantityRevision[];
   productOrigin: string;
+  productAddedOn: number;
   productBasePrice: number;
 }
 

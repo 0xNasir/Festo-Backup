@@ -13,6 +13,8 @@ export class Quotations {
   designation: string;
   status: string;
   contactBy: string;
+  contactByUserId: string;
+  contactByUsername: string;
   contactByDesignation: string;
   remarks: string;
   productList: Products[];

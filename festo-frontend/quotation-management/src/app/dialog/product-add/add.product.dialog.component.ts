@@ -10,6 +10,10 @@ import {QuotationsService} from '../../services/quotations.service';
 })
 export class AddProductDialogComponent implements OnInit {
   form: FormGroup;
+  public categories = ['Plastic Tubing', 'Pneumatic Fitting & Connector', 'Valves', 'Valves - Special', 'Coil',
+    'Linear Cylinders', 'Rotary Cylinders', 'Filter Regulator', 'Service Unit', 'Filter', 'Filter Cartridge',
+    'Pressure Regulator', 'Media Sensors', 'Position Sensors', 'Vacuum Generator', 'Suction Cup' +
+    'Pressure Switch', 'Silencer', 'Others'];
 
   constructor(
     private service: QuotationsService,
@@ -28,11 +32,12 @@ export class AddProductDialogComponent implements OnInit {
       productCategory: ['', Validators.required],
       productDescription: ['', Validators.required],
       productPrice: ['0'],
+      productBasePrice: ['0'],
       productInStock: ['', Validators.required],
       productUuq: ['0'],
       productLoan: ['0'],
       productBooking: ['0'],
-      productOrigin: ['', Validators.required]
+      productOrigin: ['']
     });
   }
 

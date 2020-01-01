@@ -141,7 +141,7 @@
               <div class="input-group">
                 <mat-form-field class="contact_by">
                   <input [matAutocomplete]="contactByComplete" matInput placeholder="Contact By"
-                         formControlName="contactBy" (input)="filterContactBy($event.target.value)" required>
+                         formControlName="contactBy" (input)="filterContactBy(quotationForm.value.contactBy)" required>
                   <mat-autocomplete #contactByComplete="matAutocomplete">
                     <mat-option *ngFor="let user of allUser" [value]="user.name" (onSelectionChange)="selectContactBy(user)">
                       <span>{{user.name}}</span>
@@ -178,7 +178,7 @@
             <div class="col-md-4">
               <div class="input-group">
                 <mat-form-field class="remarks">
-                  <input matInput placeholder="Quotation Reference" formControlName="quotaRef">
+                  <input matInput placeholder="PR Reference" formControlName="quotaRef">
                   <mat-error>Field is required</mat-error>
                 </mat-form-field>
               </div>
@@ -207,7 +207,7 @@
                *ngFor="let product of quotationForm.get('productList')['controls']; let i=index" id="singleProduct">
             <div [formGroupName]="i">
               <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                   <div class="input-group">
                     <mat-form-field class="product-name">
                       <input matInput #thisStatus placeholder="Product Name" [matAutocomplete]="pName"
@@ -229,7 +229,7 @@
                   </span>
                   </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                   <div class="input-group">
                     <mat-form-field class="part-number">
                       <input matInput placeholder="Part No" [matAutocomplete]="part" aria-label="State"
@@ -294,6 +294,19 @@
                       <input matInput type="number" placeholder="Available Quantity" formControlName="productQtyAvailable">
                       <mat-error *ngIf="product.get('productQtyAvailable').hasError('required')">Field is required</mat-error>
                       <mat-error *ngIf="product.get('productQtyAvailable').hasError('min')">Quantity must be greater than or equal to 1</mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="input-group">
+                    <mat-form-field class="unit">
+                      <input matInput placeholder="Product Unit" aria-label="unit" formControlName="productUnit" [matAutocomplete]="auto">
+                      <mat-autocomplete #auto="matAutocomplete">
+                        <mat-option *ngFor="let unit of units" [value]="unit">
+                          {{unit}}
+                        </mat-option>
+                      </mat-autocomplete>
+                      <mat-error>Field is required</mat-error>
                     </mat-form-field>
                   </div>
                 </div>

@@ -10,7 +10,8 @@
       <a mat-list-item routerLink="/">Home</a>
       <a mat-list-item routerLink="/products">Manage products</a>
       <a mat-list-item [matMenuTriggerFor]="menu">
-        <mat-icon>apps</mat-icon> Applications
+        <mat-icon>apps</mat-icon>
+        Applications
       </a>
       <mat-menu #menu="matMenu">
         <div *ngFor="let app of user.appList">
@@ -20,7 +21,8 @@
         </div>
       </mat-menu>
       <a mat-list-item *ngIf="user" [matMenuTriggerFor]="usermenu">
-        <mat-icon>person</mat-icon>{{user.user.fullName}}
+        <mat-icon>person</mat-icon>
+        {{user.user.fullName}}
       </a>
       <mat-menu #usermenu="matMenu">
         <a mat-menu-item>
@@ -49,6 +51,11 @@
                 (click)="router.navigate(['/'])">Home</button>
         <button mat-flat-button color="primary" style="padding: 14px;font-size: 18px"
                 (click)="router.navigate(['/products'])">Manage Product</button>
+        <span *ngIf="showNotificationIcon">
+          <button mat-icon-button (click)="router.navigate(['/notification'])">
+            <mat-icon>notifications</mat-icon><sup>{{notificationCounter}}</sup>
+          </button>
+        </span>
         <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
           <mat-icon>apps</mat-icon>
         </button>

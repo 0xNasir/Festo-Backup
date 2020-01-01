@@ -15,6 +15,7 @@ import {ProductDialogComponent} from '../../dialog/product/product.dialog.compon
 })
 export class ManageHistoryComponent implements OnInit {
   permission: any;
+  public showSpinner = true;
   private id: string;
   public quotationObject: Quotations;
   quotaNo: string;
@@ -42,6 +43,7 @@ export class ManageHistoryComponent implements OnInit {
     this.activatedRoute.paramMap.subscribe(params => {
       this.id = params.get('id');
       this.quotationService.getSingleQuotation(this.id).subscribe(data => {
+        this.showSpinner = false;
         this.quotationObject = data;
         this.quotaNo = data.quotaNo;
         this.historyArray = new MatTableDataSource(data.history);

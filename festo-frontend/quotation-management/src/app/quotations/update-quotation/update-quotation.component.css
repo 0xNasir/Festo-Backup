@@ -23,7 +23,9 @@
     width: 80%; margin: 50px auto;
   }
 }
-
+mat-spinner {
+  margin: 0 auto;
+}
 
 /*Animation for spinner on button*/
 @keyframes spinner {

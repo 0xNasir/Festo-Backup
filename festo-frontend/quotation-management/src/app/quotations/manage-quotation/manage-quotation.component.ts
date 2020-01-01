@@ -10,6 +10,7 @@ import {AuthService} from '../../services/auth.service';
 import {RedirectService} from '../../services/redirect.service';
 import {RevisedQuotationComponent} from '../../dialog/revised-quotation/revised-quotation.component';
 import Travel from '../../services/travel';
+import {of} from 'rxjs';
 
 export class FilterDate {
   fromDate: any;
@@ -22,7 +23,7 @@ export class FilterDate {
   styleUrls: ['./manage-quotation.component.css']
 })
 export class ManageQuotationComponent implements OnInit {
-  showSpinner: boolean;
+  public showSpinner = true;
   filterTxt: string;
   filterFieldPlaceholder = 'Filter';
   filterBy = 2;
@@ -31,6 +32,7 @@ export class ManageQuotationComponent implements OnInit {
     fromDate: '',
     toDate: ''
   };
+  public quotaStatus = ['all', 'preparing', 'ready', 'win', 'loss', 'pending', 'incomplete'];
   clickedDiv: string;
   lowestDate: any;
   highestDate: any;
@@ -45,6 +47,8 @@ export class ManageQuotationComponent implements OnInit {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   public isHandset: boolean;
   public searchValue: string;
+  public staffTitleText: string;
+  public routerPath: string;
 
   constructor(private quotationService: QuotationsService,
               public router: Router,
@@ -58,14 +62,20 @@ export class ManageQuotationComponent implements OnInit {
 
 
   ngOnInit() {
-    this.showSpinner = true;
     this.onResize(event);
+    const routerPortion = this.activatedRoute.snapshot.routeConfig.path.split(':');
+    this.routerPath = routerPortion[0];
     this.activatedRoute.paramMap.subscribe(params => {
       this.status = params.get('status');
-      if (this.status === 'all') {
+      if (routerPortion[0] === 'quotations/staff/') {
+        this.staffTitleText = ' managed by ' + params.get('staff');
+        const staff = params.get('staff');
+        this.getStaffQuotationData(staff);
+      } else if (this.status === 'all') {
         this.router.navigate(['/quotations']);
+      } else {
+        this.getQuotation(this.status);
       }
-      this.getQuotation(this.status);
     });
   }
 
@@ -115,6 +125,24 @@ export class ManageQuotationComponent implements OnInit {
     });
   }
 
+  getStaffQuotationData(staff: string) {
+    this.quotationService.getAllQuotations().subscribe(data => {
+      this.showSpinner = false;
+      this.quotationArray = data;
+      this.quotationArray = this.quotationArray.filter(dt => {
+        return (dt.contactByUsername.toLowerCase() === staff.toLowerCase());
+      });
+      const allEpochDates = this.quotationArray.map(pdt => {
+        return Number(pdt.date) * 1000;
+      });
+      this.filterData.fromDate = new Date(Math.min.apply(null, allEpochDates));
+      this.filterData.toDate = new Date(Math.max.apply(null, allEpochDates));
+      this.quotations = new MatTableDataSource(this.quotationArray);
+      this.quotations.paginator = this.paginator;
+      this.quotations.sort = this.sort;
+    });
+  }
+
   applyFilter(filterValue: string) {
     this.filterTxt = filterValue;
     this.quotations.filter = filterValue.trim().toLowerCase();
@@ -125,8 +153,9 @@ export class ManageQuotationComponent implements OnInit {
 
   deleteQuotation(id: string) {
     if (confirm('Do you want to delete quotation?')) {
+      this.showSpinner = true;
       this.quotationService.deleteQuotation(id).subscribe(data => {
-        this.getQuotation(this.status);
+        this.ngOnInit();
         this.snackBar.open(data.message, 'Close', {
           duration: 2000,
         });
@@ -188,8 +217,8 @@ export class ManageQuotationComponent implements OnInit {
   }
 
   gotoPDF(element: Quotations) {
-    console.log(element);
     this.opentab.post(element, Travel.quotationURL + '?api=pdf/festo');
+    this.showSpinner = true;
     this.ngOnInit();
   }
 
@@ -247,8 +276,9 @@ export class ManageQuotationComponent implements OnInit {
   }
 
   markAs(status: string) {
+    this.showSpinner = true;
     this.quotationService.updateStatus(status, this.selectedQuotation.id).subscribe(dts => {
-      this.getQuotation(this.status);
+      this.ngOnInit();
       this.snackBar.open(dts.message, 'Close', {
         duration: 2000,
       });

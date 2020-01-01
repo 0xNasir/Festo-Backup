@@ -14,6 +14,7 @@ const routes: Routes = [
   {path: '', component: DashboardComponent, canActivate: [AuthGuard]},
   {path: 'quotations', component: ManageQuotationComponent, canActivate: [AuthGuard]},
   {path: 'quotations/status/:status', component: ManageQuotationComponent, canActivate: [AuthGuard]},
+  {path: 'quotations/staff/:staff', component: ManageQuotationComponent, canActivate: [AuthGuard]},
   {path: 'quotation/add', component: AddQuotationComponent, canActivate: [AuthGuard]},
   {path: 'quotation/update/:id', component: UpdateQuotationComponent, canActivate: [AuthGuard]},
   {path: 'quotation/revise/:id/add', component: AddRevisedQuotationComponent, canActivate: [AuthGuard]},

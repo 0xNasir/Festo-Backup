@@ -2,6 +2,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import Travel from './travel';
 import {Injectable} from '@angular/core';
+
 @Injectable({
   providedIn: 'root'
 })
