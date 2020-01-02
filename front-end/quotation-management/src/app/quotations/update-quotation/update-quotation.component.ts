@@ -294,7 +294,7 @@ export class UpdateQuotationComponent implements OnInit {
       productType: [prdt.productType, Validators.required],
       productQty: [productQty],
       productQtyAvailable: [productQty],
-      productQtyUnit: ['', Validators.required],
+      productUnit: ['', Validators.required],
       productPrice: [prdt.productPrice, Validators.required],
       productDescription: [prdt.productDescription, Validators.required],
       totalPrice: [productQty * prdt.productPrice]

@@ -9,6 +9,9 @@
     <mat-nav-list>
       <a mat-list-item routerLink="/">Home</a>
       <a mat-list-item routerLink="/quotations">Manage Quotations</a>
+      <a *ngIf="showNotificationIcon" mat-list-item routerLink="/notification'">
+        <mat-icon>notifications</mat-icon>Notification <span class="example-fill-remaining-space"></span> <sup style="float: right;">{{notificationCounter}}</sup>
+      </a>
       <a mat-list-item [matMenuTriggerFor]="menu">
         <mat-icon>apps</mat-icon>
       </a>
@@ -47,6 +50,11 @@
       <span class="spacer" [ngClass]="{hidden:!(isHandset) === false}">
         <button mat-flat-button color="primary" (click)="router.navigate(['/'])" style="padding: 14px;font-size: 18px">Home</button>
         <button mat-flat-button color="primary" (click)="router.navigate(['/quotations'])" style="padding: 14px;font-size: 18px">Manage Quotations</button>
+        <span *ngIf="showNotificationIcon">
+          <button mat-icon-button (click)="router.navigate(['/notification'])">
+            <mat-icon>notifications</mat-icon><sup>{{notificationCounter}}</sup>
+          </button>
+        </span>
         <button mat-icon-button [matMenuTriggerFor]="menu">
           <mat-icon>apps</mat-icon>
         </button>

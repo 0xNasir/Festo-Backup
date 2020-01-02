@@ -5,6 +5,7 @@ export class Products {
   internalPartNumber: string;
   productType: string;
   productQty: number;
+  productUnit: string;
   productPrice: number;
   totalPrice: number;
   productDescription: string;

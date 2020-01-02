@@ -42,6 +42,7 @@ import {AddContactDialogComponent} from './dialog/contact-add/add.contact.dialog
 import { RevisedQuotationComponent } from './dialog/revised-quotation/revised-quotation.component';
 import { AddRevisedQuotationComponent } from './quotations/add-revised-quotation/add-revised-quotation.component';
 import { ManageHistoryComponent } from './quotations/manage-history/manage-history.component';
+import { NotificationComponent } from './quotations/notification/notification.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -58,7 +59,8 @@ import { ManageHistoryComponent } from './quotations/manage-history/manage-histo
     AddContactDialogComponent,
     RevisedQuotationComponent,
     AddRevisedQuotationComponent,
-    ManageHistoryComponent
+    ManageHistoryComponent,
+    NotificationComponent
   ],
   entryComponents: [
     ProductDialogComponent,

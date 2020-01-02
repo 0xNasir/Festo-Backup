@@ -5,6 +5,7 @@ import {AuthService} from '../services/auth.service';
 import {Router} from '@angular/router';
 import {Location} from '@angular/common';
 import Travel from '../services/travel';
+import {NotificationService} from '../services/notification.service';
 
 @Component({
   selector: 'app-main-nav',
@@ -12,6 +13,8 @@ import Travel from '../services/travel';
   styleUrls: ['./main-nav.component.css']
 })
 export class MainNavComponent implements OnInit {
+  public showNotificationIcon: boolean;
+  public notificationCounter: number;
   userInfo: UserInfo = {
     fullName: '',
     userId: '',
@@ -37,6 +40,7 @@ export class MainNavComponent implements OnInit {
   constructor(
     private breakpointObserver: BreakpointObserver,
     private authService: AuthService,
+    public notificationService: NotificationService,
     public location: Location,
     public router: Router,
   ) {
@@ -45,6 +49,7 @@ export class MainNavComponent implements OnInit {
 
   ngOnInit(): void {
     this.onResize(event);
+    this.loadNotification();
   }
 
   getUserInfo() {
@@ -53,6 +58,8 @@ export class MainNavComponent implements OnInit {
       if (!this.user.permission.qms) {
         console.log('permission denied');
         document.location.href = Travel.swassertiveURL;
+      } else {
+        this.showNotificationIcon = this.user.permission.qms.qms_notification;
       }
     });
   }
@@ -72,5 +79,13 @@ export class MainNavComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.isHandset = window.innerWidth < 800;
+  }
+
+  loadNotification() {
+    this.notificationService.getNotification().subscribe(data => {
+      this.notificationService.nonZeroPriceEmergencyData(data).subscribe(dts => {
+        this.notificationCounter = dts.length;
+      });
+    });
   }
 }
