@@ -147,7 +147,9 @@ httpRESTMethod::post(function ($data){
     global $session;
     $managed_by=$session->data["user"]['username'];
     global $db;
-    $rst=$db->query("INSERT INTO `quotation` (`quota_id`, `quota_date`, `quota_no`, `quota_ref`, `company_name`,`branch_name`,`address`, `contact_person`,`person_id`,`designation`, `status`, `contact_by`, `contact_by_userId`, `contact_by_username`,`contact_by_designation`,`contact_by_phone`, `remarks`, `managed_by`, `state`, `doc_data`, `terms_condition`, `print_count`) VALUES(NULL, '$data->date', '$data->quotaNo','$data->quotaRef', '$data->companyName', '$data->branchName', '$data->branchAddress', '$data->contactPerson', '$data->personId', '$data->designation', '$data->status', '$data->contactBy', '$data->contactByUserId', '$data->contactByUsername', '$data->contactByDesignation', '$data->contactByPhone', '$data->remarks','$managed_by','Incomplete', '', '', 0)");
+    $doc=json_encode($data->generatePdf);
+    $terms=json_encode($data->termsCondition);
+    $rst=$db->query("INSERT INTO `quotation` (`quota_id`, `quota_date`, `quota_no`, `quota_ref`, `company_name`,`branch_name`,`address`, `contact_person`,`person_id`,`designation`, `status`, `contact_by`, `contact_by_userId`, `contact_by_username`,`contact_by_designation`,`contact_by_phone`, `remarks`, `managed_by`, `state`, `doc_data`, `terms_condition`, `print_count`) VALUES(NULL, '$data->date', '$data->quotaNo','$data->quotaRef', '$data->companyName', '$data->branchName', '$data->branchAddress', '$data->contactPerson', '$data->personId', '$data->designation', '$data->status', '$data->contactBy', '$data->contactByUserId', '$data->contactByUsername', '$data->contactByDesignation', '$data->contactByPhone', '$data->remarks','$managed_by','Incomplete', '$doc', '$terms', 0)");
     if ($rst){
         $quotationId = $db->getLastId();
         $rdt["injected"]=true;

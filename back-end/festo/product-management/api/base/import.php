@@ -4,7 +4,7 @@ httpRESTMethod::put(function ($data) {
     $count = 0;
     $fail = 0;
     foreach ($data as $dts) {
-        $sql = $db->query("UPDATE `products` SET `productPrice`='$dts->SalePrice', `productBasePrice`='$dts->BasePrice' WHERE `productType`='$dts->Identcode1' AND `productPartNo`='$dts->PartNo'");
+        $sql = $db->query("UPDATE `products` SET `productPrice`='$dts->SalePrice', `productBasePrice`='$dts->BasePrice', `productAddedOn`='$dts->Date' WHERE `productType`='$dts->Identcode1' AND `productPartNo`='$dts->PartNo'");
         if ($sql) {
             $count++;
         } else {

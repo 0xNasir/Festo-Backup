@@ -9,48 +9,50 @@
     <div class="toolbar-left-content">
     </div>
   </mat-toolbar>
-  <div class="sinner">
-    <mat-spinner *ngIf="showSpinner"></mat-spinner>
-  </div>
-  <table *ngIf="!showSpinner" mat-table [dataSource]="product" class="mat-elevation-z8 table-responsive" matSort>
-
-    <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> ID</th>
-      <td mat-cell *matCellDef="let element"> {{element.productId}}</td>
-    </ng-container>
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Name</th>
-      <td mat-cell *matCellDef="let element"> {{element.productName}}</td>
-    </ng-container>
-    <ng-container matColumnDef="part">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Part</th>
-      <td mat-cell *matCellDef="let element"> {{element.productPartNo}}</td>
-    </ng-container>
-    <ng-container matColumnDef="type">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Type</th>
-      <td mat-cell *matCellDef="let element"> {{element.productType}}</td>
-    </ng-container>
-    <ng-container matColumnDef="price">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> price</th>
-      <td mat-cell *matCellDef="let element"> {{element.productPrice}}</td>
-    </ng-container>
-    <ng-container matColumnDef="stock">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Stock</th>
-      <td mat-cell *matCellDef="let element"> {{element.productInStock}}</td>
-    </ng-container>
-    <ng-container matColumnDef="date">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Date</th>
-      <td mat-cell *matCellDef="let element"> {{element.productAddedOn*1000|date}}</td>
-    </ng-container>
-    <ng-container matColumnDef="option">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Action</th>
-      <td mat-cell *matCellDef="let element">
-        <button *ngIf="permission.pms.pms_update" matTooltip="Update" mat-icon-button color="accent" (click)="openEmergencyProductPriceUpdatePopUp(element)">
-          <mat-icon aria-hidden="false" aria-label="edit icon">edit</mat-icon>
-        </button>
-      </td>
-    </ng-container>
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
+  <mat-card>
+    <div class="sinner">
+      <mat-spinner *ngIf="showSpinner"></mat-spinner>
+    </div>
+    <h1 *ngIf="notificLength==0" style="font-weight: 100;">No notification found to display</h1>
+    <table *ngIf="!showSpinner && notificLength>0" mat-table [dataSource]="product" class="mat-elevation-z8 table-responsive" matSort>
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ID</th>
+        <td mat-cell *matCellDef="let element"> {{element.productId}}</td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Name</th>
+        <td mat-cell *matCellDef="let element"> {{element.productName}}</td>
+      </ng-container>
+      <ng-container matColumnDef="part">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Part</th>
+        <td mat-cell *matCellDef="let element"> {{element.productPartNo}}</td>
+      </ng-container>
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Type</th>
+        <td mat-cell *matCellDef="let element"> {{element.productType}}</td>
+      </ng-container>
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> price</th>
+        <td mat-cell *matCellDef="let element"> {{element.productPrice}}</td>
+      </ng-container>
+      <ng-container matColumnDef="stock">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Stock</th>
+        <td mat-cell *matCellDef="let element"> {{element.productInStock}}</td>
+      </ng-container>
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Date</th>
+        <td mat-cell *matCellDef="let element"> {{element.productAddedOn*1000|date}}</td>
+      </ng-container>
+      <ng-container matColumnDef="option">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Action</th>
+        <td mat-cell *matCellDef="let element">
+          <button *ngIf="permission.pms.pms_update" matTooltip="Update" mat-icon-button color="accent" (click)="openEmergencyProductPriceUpdatePopUp(element)">
+            <mat-icon aria-hidden="false" aria-label="edit icon">edit</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </mat-card>
 </div>

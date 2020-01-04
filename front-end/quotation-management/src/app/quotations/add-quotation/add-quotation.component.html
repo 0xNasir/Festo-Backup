@@ -213,7 +213,7 @@
                       <input matInput #thisStatus placeholder="Product Name" [matAutocomplete]="pName"
                              aria-label="State"
                              formControlName="productName" (focus)="focusStatus(i)"
-                             (input)="pickProduct(product.value.productName)">
+                             (input)="pickProduct(product.value.productName)" required>
                       <mat-autocomplete #pName="matAutocomplete">
                         <mat-option *ngFor="let prdt of SearchProduct" [value]="prdt.productName"
                                     (onSelectionChange)="selectProduct(prdt, i, product.value.productQty)">
@@ -234,7 +234,7 @@
                     <mat-form-field class="part-number">
                       <input matInput placeholder="Part No" [matAutocomplete]="part" aria-label="State"
                              formControlName="productPartNumber"
-                             (input)="pickProductByPart(product.value.productPartNumber)" (focus)="focusStatus(i)">
+                             (input)="pickProductByPart(product.value.productPartNumber)" (focus)="focusStatus(i)" required>
                       <mat-autocomplete #part="matAutocomplete">
                         <mat-option *ngFor="let prdt of SearchProduct" [value]="prdt.productPartNumber"
                                     (onSelectionChange)="selectProduct(prdt, i, product.value.productQty)">
@@ -255,7 +255,7 @@
                     <mat-form-field class="type">
                       <input matInput placeholder="Product Type" [matAutocomplete]="type" aria-label="type"
                              formControlName="productType"
-                             (input)="pickType(product.value.productType)" (focus)="focusStatus(i)">
+                             (input)="pickType(product.value.productType)" (focus)="focusStatus(i)" required>
                       <mat-autocomplete #type="matAutocomplete">
                         <mat-option *ngFor="let type of SearchProduct" [value]="type.productType"
                                     (onSelectionChange)="selectProduct(type, i, product.value.productQty)">
@@ -274,7 +274,7 @@
                 <div class="col-md-4">
                   <div class="input-group">
                     <mat-form-field class="internal">
-                      <input matInput placeholder="Internal Part Number" formControlName="internalPartNumber">
+                      <input matInput placeholder="Internal Part Number" formControlName="internalPartNumber" required>
                       <mat-error>Field is required</mat-error>
                     </mat-form-field>
                   </div>
@@ -282,7 +282,7 @@
                 <div class="col-md-2">
                   <div class="input-group">
                     <mat-form-field class="qty">
-                      <input matInput type="number" placeholder="Required Quantity" formControlName="productQty">
+                      <input matInput type="number" placeholder="Required Quantity" formControlName="productQty" required>
                       <mat-error *ngIf="product.get('productQty').hasError('required')">Field is required</mat-error>
                       <mat-error *ngIf="product.get('productQty').hasError('min')">Quantity must be greater than or equal to 1</mat-error>
                     </mat-form-field>
@@ -291,7 +291,7 @@
                 <div class="col-md-2">
                   <div class="input-group">
                     <mat-form-field class="qty">
-                      <input matInput type="number" placeholder="Available Quantity" formControlName="productQtyAvailable">
+                      <input matInput type="number" placeholder="Available Quantity" formControlName="productQtyAvailable" required>
                       <mat-error *ngIf="product.get('productQtyAvailable').hasError('required')">Field is required</mat-error>
                       <mat-error *ngIf="product.get('productQtyAvailable').hasError('min')">Quantity must be greater than or equal to 1</mat-error>
                     </mat-form-field>
@@ -300,7 +300,7 @@
                 <div class="col-md-4">
                   <div class="input-group">
                     <mat-form-field class="unit">
-                      <input matInput placeholder="Product Unit" aria-label="unit" formControlName="productUnit" [matAutocomplete]="auto">
+                      <input matInput placeholder="Product Unit" aria-label="unit" formControlName="productUnit" [matAutocomplete]="auto" required>
                       <mat-autocomplete #auto="matAutocomplete">
                         <mat-option *ngFor="let unit of units" [value]="unit">
                           {{unit}}
@@ -359,7 +359,7 @@
                 <div class="col-md-6">
                   <div class="input-group">
                     <mat-form-field class="product-name">
-                      <input matInput #thisStatus placeholder="Product Name" formControlName="productName">
+                      <input matInput #thisStatus placeholder="Product Name" disabled value="{{product.get('productName').value}}">
                       <mat-error>Field is required</mat-error>
                     </mat-form-field>
                   </div>
@@ -367,7 +367,7 @@
                 <div class="col-md-6">
                   <div class="input-group">
                     <mat-form-field class="part-number">
-                      <input matInput placeholder="Part No" formControlName="productPartNumber">
+                      <input matInput placeholder="Part No" disabled value="{{product.get('productPartNumber').value}}">
                       <mat-error>Field is required</mat-error>
                     </mat-form-field>
                   </div>
@@ -375,7 +375,7 @@
                 <div class="col-md-12">
                   <div class="input-group">
                     <mat-form-field class="qty">
-                      <input matInput type="number" placeholder="Unit price" formControlName="productPrice">
+                      <input matInput type="number" placeholder="Unit price" formControlName="productPrice" required>
                       <mat-error *ngIf="product.get('productPrice').hasError('required')">Field is required</mat-error>
                       <mat-error *ngIf="product.get('productPrice').hasError('min')">Price can't be negative</mat-error>
                     </mat-form-field>

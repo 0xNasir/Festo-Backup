@@ -1,6 +1,9 @@
 <?php
 httpRESTMethod::post(function ($data){
    global $db;
+   if (sizeof($data)<1){
+       return array();
+   }
     $sql="SELECT * FROM `products` WHERE `products`.`productType` IN (";
     for ($i=0;$i<sizeof($data);$i++){
         if ($i!=sizeof($data)-1){
@@ -10,5 +13,9 @@ httpRESTMethod::post(function ($data){
         }
     }
     $rst=$db->query($sql);
-    return $rst->rows;
+    if ($rst->num_rows){
+        return $rst->rows;
+    }else{
+        return array();
+    }
 });

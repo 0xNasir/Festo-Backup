@@ -244,7 +244,9 @@ export class AddQuotationComponent implements OnInit {
     });
   }
 
-  // Last quotation Id to have the auto generate quotation Number
+  /**
+   * Last quotation Id to have the auto generate quotation Number
+   */
   getQuotationId() {
     this.quotationService.getLastQuotationId().subscribe(data => {
       const date = new Date(this.quotationForm.value.date);
@@ -262,6 +264,10 @@ export class AddQuotationComponent implements OnInit {
     });
   }
 
+  /**
+   * When the user submit the qutation form, this function will be invoked.
+   * It will save the quotation in the database by calling 'storeQuotations' of quotation service.
+   */
   saveQuotation() {
     this.loading = true;
     const upDt = this.quotationForm.value;

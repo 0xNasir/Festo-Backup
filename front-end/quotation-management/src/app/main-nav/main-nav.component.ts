@@ -68,6 +68,9 @@ export class MainNavComponent implements OnInit {
     document.location.href = url;
   }
 
+  /**
+   * Logging out by clicking on log out button
+   */
   getLogOut() {
     this.authService.logMeOut().subscribe(data => {
       if (data.status === 'success') {
@@ -76,11 +79,19 @@ export class MainNavComponent implements OnInit {
     });
   }
 
+  /**
+   * Getting the window size for responsiveness.
+   * If the innerwidth is less than 800dp, it will be handset size.
+   * @param event
+   */
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.isHandset = window.innerWidth < 800;
   }
 
+  /**
+   * Getting the number of notification.
+   */
   loadNotification() {
     this.notificationService.getNotification().subscribe(data => {
       this.notificationService.nonZeroPriceEmergencyData(data).subscribe(dts => {

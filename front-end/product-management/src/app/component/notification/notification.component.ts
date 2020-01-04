@@ -14,6 +14,7 @@ import {EmergencyProductPriceDialogComponent} from './update-popup/emergency.pro
 })
 export class NotificationComponent implements OnInit {
   public showSpinner = true;
+  public notificLength = 0;
   type: any;
   notifications: any;
   empty: boolean;
@@ -45,15 +46,14 @@ export class NotificationComponent implements OnInit {
     this.notificationService.getNotification().subscribe(data => {
       this.type = data;
       this.empty = data.length < 1;
-      if (!this.empty) {
-        this.notificationService.zeroPriceEmergencyData(this.type).subscribe(dts => {
-          this.showSpinner = false;
-          this.notifications = dts;
-          this.product = new MatTableDataSource(this.notifications);
-          this.product.paginator = this.paginator;
-          this.product.sort = this.sort;
-        });
-      }
+      this.notificationService.zeroPriceEmergencyData(this.type).subscribe(dts => {
+        this.showSpinner = false;
+        this.notificLength = dts.length;
+        this.notifications = dts;
+        this.product = new MatTableDataSource(this.notifications);
+        this.product.paginator = this.paginator;
+        this.product.sort = this.sort;
+      });
     });
   }
 

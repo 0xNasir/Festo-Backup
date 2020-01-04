@@ -79,9 +79,14 @@ export class MainNavComponent implements OnInit {
 
   loadNotification() {
     this.notificationService.getNotification().subscribe(data => {
-      this.notificationService.zeroPriceEmergencyData(data).subscribe(dts => {
-        this.notificationCounter = dts.length;
-      });
+      if (data.length === 0) {
+
+        this.notificationCounter = 0;
+      } else {
+        this.notificationService.zeroPriceEmergencyData(data).subscribe(dts => {
+          this.notificationCounter = dts.length;
+        });
+      }
     });
   }
 }

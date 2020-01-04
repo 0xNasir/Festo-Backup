@@ -139,6 +139,8 @@ export class ManageProductComponent implements OnInit {
       });
     }
     this.product = new MatTableDataSource(productData);
+    this.product.paginator = this.paginator;
+    this.product.sort = this.sort;
   }
 
   FilterByUpcoming(upcoming: string) {
@@ -149,6 +151,8 @@ export class ManageProductComponent implements OnInit {
       });
     }
     this.product = new MatTableDataSource(productData);
+    this.product.paginator = this.paginator;
+    this.product.sort = this.sort;
   }
 
   openProductList(element: string) {
@@ -186,7 +190,7 @@ export class ManageProductComponent implements OnInit {
     let csv = 'Position,Part No.,Quantity,Your part no.,Identcode 1,Identcode 2,x-Stroke,Company\n';
     this.zeroPriceProduct.forEach(zeroData => {
       csv += i.toLocaleString() + ',' + zeroData.productPartNo + ','
-        + zeroData.productInStock + ',,' + zeroData.productType + ',' + ',' + ',';
+        + zeroData.productInStock + ',,' + zeroData.productType + ',,,' + zeroData.productOrigin;
       csv += '\n';
       i++;
     });
@@ -276,6 +280,12 @@ export class ManageProductComponent implements OnInit {
     }
   }
 
+  /**
+   * When the user select a row, this function will be invoked
+   * It will assign some data to a variable for other actions.
+   * If a selected row is clicked, then it will remove variable and deselect the row.
+   * @param row
+   */
   selectedRow(row: Product) {
     if (this.clickedDiv !== row.productId) {
       this.clickedDiv = row.productId;
@@ -287,6 +297,9 @@ export class ManageProductComponent implements OnInit {
 
   /**
    * Data analysis for inventory update.
+   * User will upload a csv file in a specific format.
+   * Then a new formatted file will be downloaded
+   * last 8 digits of file will be the date of file in YYYYMMDD format
    * @param files
    * @constructor
    */
