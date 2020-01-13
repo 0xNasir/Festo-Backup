@@ -1,5 +1,5 @@
 import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
-import {MatDialog, MatPaginator, MatSnackBar, MatSort, MatTableDataSource} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {Quotations} from '../../plain-object/quotations';
 import {QuotationsService} from '../../services/quotations.service';
 import {Products} from '../../plain-object/products';
@@ -10,7 +10,9 @@ import {AuthService} from '../../services/auth.service';
 import {RedirectService} from '../../services/redirect.service';
 import {RevisedQuotationComponent} from '../../dialog/revised-quotation/revised-quotation.component';
 import Travel from '../../services/travel';
-import {of} from 'rxjs';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
 
 export class FilterDate {
   fromDate: any;
@@ -32,6 +34,9 @@ export class ManageQuotationComponent implements OnInit {
     fromDate: '',
     toDate: ''
   };
+  /**
+   * Declaring a list for quotation status.
+   */
   public quotaStatus = ['all', 'preparing', 'ready', 'win', 'loss', 'pending', 'incomplete'];
   clickedDiv: string;
   lowestDate: any;
@@ -40,11 +45,14 @@ export class ManageQuotationComponent implements OnInit {
   quotationArray: Quotations[];
   selectedQuotation: Quotations;
   quotations: MatTableDataSource<Quotations>;
+  /**
+   * Declaring material table column definition.
+   */
   displayedColumns: string[] = ['date', 'quota', 'company',
     'contact', 'cumulativePrice', 'status',
     'person', 'remarks'];
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: false}) sort: MatSort;
   public isHandset: boolean;
   public searchValue: string;
   public staffTitleText: string;
@@ -216,13 +224,22 @@ export class ManageQuotationComponent implements OnInit {
     hiddenElement.click();
   }
 
+  /**
+   * Open the selected quotation in a pdf format.
+   * @param element
+   */
   gotoPDF(element: Quotations) {
     this.opentab.post(element, Travel.quotationURL + '?api=pdf/festo');
     this.showSpinner = true;
     this.ngOnInit();
   }
 
-// 1,12,65,446.00
+  /**
+   * BDT currency format.
+   * The proper puncuation mark in BDT system like
+   * 1,12,65,446.00
+   * @param str
+   */
   formatedPrice(str: string) {
     if (str.length > 6) {
       let ts = '';

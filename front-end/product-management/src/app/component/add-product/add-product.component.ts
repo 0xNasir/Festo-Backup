@@ -48,14 +48,22 @@ export class AddProductComponent implements OnInit {
       productType: ['', Validators.required],
       productCategory: ['', Validators.required],
       productDescription: ['', Validators.required],
-      productPrice: ['', [Validators.required, Validators.min(0)]],
-      productBasePrice: ['', [Validators.required, Validators.min(0)]],
+      productPrice: [0, [Validators.required, Validators.min(0)]],
+      productBasePrice: [0, [Validators.required, Validators.min(0)]],
       productInStock: ['', [Validators.required, Validators.min(0)]],
       productUuq: [0, [Validators.required, Validators.min(0)]],
       productLoan: [0, [Validators.required, Validators.min(0)]],
       productBooking: [0, [Validators.required, Validators.min(0)]],
       productOrigin: ['']
     });
+    /**
+     * If the price log permission is available, then price field will be set null,
+     * and display as well to add
+     */
+    if (this.permission.pms.pms_price_log) {
+      this.form.get('productPrice').setValue('');
+      this.form.get('productBasePrice').setValue('');
+    }
   }
 
   /**
@@ -67,7 +75,7 @@ export class AddProductComponent implements OnInit {
     }
     /**
      * Call the service function to store the product data at URL
-     * http://127.0.0.1/festo/product-management/
+     * http://host/festo/product-management/
      */
     this.productService.storeProduct(this.form.value).subscribe(data => {
       this.snackBar.open(data['message'], 'Close', {

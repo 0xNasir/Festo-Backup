@@ -3,8 +3,18 @@ httpRESTMethod::put(function ($data) {
     global $db;
     $count = 0;
     $fail = 0;
-    foreach ($data as $dts) {
-        $sql = $db->query("UPDATE `products` SET `productPrice`='$dts->SalePrice', `productBasePrice`='$dts->BasePrice', `productAddedOn`='$dts->Date' WHERE `productType`='$dts->Identcode1' AND `productPartNo`='$dts->PartNo'");
+    foreach ($data->data as $dts) {
+        /**
+         * If the article designation is like DESCRIPTION TYPE
+         */
+        $lSpace = 0;
+        for ($x = 0; $x < strlen($dts->ArticleDesignation); $x++) {
+            if ($dts->ArticleDesignation[$x]==' '){
+                $lSpace=$x;
+            }
+        }
+        $type = $dts->Identcode1 === '0' ? substr($dts->ArticleDesignation, $lSpace+1, strlen($dts->ArticleDesignation)) : $dts->Identcode1;
+        $sql = $db->query("UPDATE `products` SET `productPrice`='$dts->SalePrice', `productBasePrice`='$dts->BasePrice', `productAddedOn`='$data->Date' WHERE `productType`='$type' AND `productPartNo`='$dts->PartNo'");
         if ($sql) {
             $count++;
         } else {

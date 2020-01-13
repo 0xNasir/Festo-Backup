@@ -42,8 +42,6 @@ export class AddRevisedQuotationComponent implements OnInit {
   filteredBranch: Branch[];
   filteredContact: Contact[];
   quotaStatus: QuotaStatus[] = [
-    {value: 'Preparing'},
-    {value: 'Ready'},
     {value: 'Pending'},
     {value: 'Win'},
     {value: 'Loss'}

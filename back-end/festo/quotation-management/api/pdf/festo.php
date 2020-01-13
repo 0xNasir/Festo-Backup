@@ -6,8 +6,13 @@ if (isset($_POST)) {
     $selectQuota=$db->query("SELECT * FROM  `quotation` WHERE `quotation`.`quota_id`='$dtId'");
     if ($selectQuota){
         $quota=$selectQuota->rows[0]['print_count']+1;
-        $sql=$db->query("UPDATE `quotation` SET `print_count` = '$quota' WHERE `quotation`.`quota_id` = '$dtId'");
-        if ($sql){
+        $sql="UPDATE `quotation` SET";
+        if ($selectQuota->rows[0]['status']=='Ready'){
+            $sql=$sql." `status`='Pending',";
+        }
+        $sql=$sql." `print_count` = '$quota' WHERE `quotation`.`quota_id` = '$dtId'";
+        $rst=$db->query($sql);
+        if ($rst){
 
 //============================================================+
 // File name   : example_003.php

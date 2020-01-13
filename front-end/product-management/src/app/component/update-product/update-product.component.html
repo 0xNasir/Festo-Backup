@@ -46,7 +46,7 @@
             </mat-form-field>
           </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3" *ngIf="permission.pms.pms_price_log">
           <div class="input-group">
             <mat-form-field class="price">
               <input matInput placeholder="Sales Unit Price" type="number" formControlName="productPrice" required>
@@ -55,7 +55,7 @@
             </mat-form-field>
           </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3" *ngIf="permission.pms.pms_price_log">
           <div class="input-group">
             <mat-form-field class="price">
               <input matInput placeholder="Base Unit Price" type="number" formControlName="productBasePrice" required>
@@ -64,7 +64,7 @@
             </mat-form-field>
           </div>
         </div>
-        <div class="col-md-3">
+        <div [class]="permission.pms.pms_price_log?'col-md-3':'col-md-4'">
           <div class="input-group">
             <mat-form-field class="stock">
               <input matInput placeholder="In Stock" type="number" formControlName="productInStock" required>
@@ -73,7 +73,7 @@
             </mat-form-field>
           </div>
         </div>
-        <div class="col-md-3">
+        <div [class]="permission.pms.pms_price_log?'col-md-3':'col-md-4'">
           <div class="input-group">
             <mat-form-field class="origin">
               <input matInput placeholder="Country of origin" type="text" formControlName="productOrigin">
@@ -90,7 +90,7 @@
             </mat-form-field>
           </div>
         </div>
-        <div class="col-md-4">
+        <div [class]="permission.pms.pms_price_log?'col-md-4':'col-md-6'">
           <div class="input-group">
             <mat-form-field class="loan">
               <input matInput placeholder="Lent product" type="number" formControlName="productLoan" required>
@@ -99,7 +99,7 @@
             </mat-form-field>
           </div>
         </div>
-        <div class="col-md-4">
+        <div [class]="permission.pms.pms_price_log?'col-md-4':'col-md-6'">
           <div class="input-group">
             <mat-form-field class="booking">
               <input matInput placeholder="Booked product" type="number" formControlName="productBooking" required>

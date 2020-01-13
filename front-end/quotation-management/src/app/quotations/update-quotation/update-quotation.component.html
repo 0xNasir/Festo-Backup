@@ -84,7 +84,7 @@
               </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-12">
               <div class="input-group">
                 <mat-form-field class="branchAddress">
                   <input matInput placeholder="Branch Adress" formControlName="branchAddress" required>
@@ -125,20 +125,6 @@
               </div>
             </div>
 
-
-            <div class="col-md-6">
-              <div class="input-group">
-                <mat-form-field>
-                  <mat-label>Status</mat-label>
-                  <mat-select formControlName="status" required>
-                    <mat-option *ngFor="let p of quotaStatus" [value]="p.value">
-                      {{ p.value }}
-                    </mat-option>
-                  </mat-select>
-                  <mat-error>Please! select a status</mat-error>
-                </mat-form-field>
-              </div>
-            </div>
             <div class="col-md-4">
               <div class="input-group">
                 <mat-form-field class="contact_by">

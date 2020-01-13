@@ -30,8 +30,8 @@ export class ManageProductComponent implements OnInit {
   upcoming: string;
   product: MatTableDataSource<Product>;
   displayedColumns: string[];
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: false}) sort: MatSort;
   public isHandset: boolean;
   public noLoad = true;
   public showAnalyze = false;

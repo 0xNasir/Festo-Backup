@@ -149,7 +149,16 @@ httpRESTMethod::post(function ($data){
     global $db;
     $doc=json_encode($data->generatePdf);
     $terms=json_encode($data->termsCondition);
-    $rst=$db->query("INSERT INTO `quotation` (`quota_id`, `quota_date`, `quota_no`, `quota_ref`, `company_name`,`branch_name`,`address`, `contact_person`,`person_id`,`designation`, `status`, `contact_by`, `contact_by_userId`, `contact_by_username`,`contact_by_designation`,`contact_by_phone`, `remarks`, `managed_by`, `state`, `doc_data`, `terms_condition`, `print_count`) VALUES(NULL, '$data->date', '$data->quotaNo','$data->quotaRef', '$data->companyName', '$data->branchName', '$data->branchAddress', '$data->contactPerson', '$data->personId', '$data->designation', '$data->status', '$data->contactBy', '$data->contactByUserId', '$data->contactByUsername', '$data->contactByDesignation', '$data->contactByPhone', '$data->remarks','$managed_by','Incomplete', '$doc', '$terms', 0)");
+    $status='Ready';
+    foreach ($data->productList as $product){
+        if ($product->productPrice>0){
+            $status='Ready';
+        }else{
+            $status='Preparing';
+            break;
+        }
+    }
+    $rst=$db->query("INSERT INTO `quotation` (`quota_id`, `quota_date`, `quota_no`, `quota_ref`, `company_name`,`branch_name`,`address`, `contact_person`,`person_id`,`designation`, `status`, `contact_by`, `contact_by_userId`, `contact_by_username`,`contact_by_designation`,`contact_by_phone`, `remarks`, `managed_by`, `state`, `doc_data`, `terms_condition`, `print_count`) VALUES(NULL, '$data->date', '$data->quotaNo','$data->quotaRef', '$data->companyName', '$data->branchName', '$data->branchAddress', '$data->contactPerson', '$data->personId', '$data->designation', '$status', '$data->contactBy', '$data->contactByUserId', '$data->contactByUsername', '$data->contactByDesignation', '$data->contactByPhone', '$data->remarks','$managed_by','Incomplete', '$doc', '$terms', 0)");
     if ($rst){
         $quotationId = $db->getLastId();
         $rdt["injected"]=true;
@@ -170,13 +179,22 @@ httpRESTMethod::put(function ($data){
     $product_list=$data->productList;
     $doc=json_encode($data->generatePdf);
     $terms=json_encode($data->termsCondition);
+    $status='Ready';
+    foreach ($data->productList as $product){
+        if ($product->productPrice>0){
+            $status='Ready';
+        }else{
+            $status='Preparing';
+            break;
+        }
+    }
     if (count($product_list)==0){
         $state='Incomplete';
     }else{
         $state='Complete';
     }
     global $db;
-    $rst=$db->query("UPDATE `quotation` SET `quota_date` = '$data->date', `quota_no` = '$data->quotaNo', `quota_ref` = '$data->quotaRef', `company_name` = '$data->companyName', `branch_name` = '$data->branchName', `address` = '$data->branchAddress', `contact_person` = '$data->contactPerson',`person_id` = '$data->personId',`designation` = '$data->designation', `status` = '$data->status', `contact_by` = '$data->contactBy', `contact_by_userId` = '$data->contactByUserId', `contact_by_username` = '$data->contactByUsername', `contact_by_designation` = '$data->contactByDesignation', `contact_by_phone` = '$data->contactByPhone', `remarks` = '$data->remarks' , `state` = '$state', `doc_data`='$doc', `terms_condition`='$terms' WHERE `quotation`.`quota_id` = '$id'");
+    $rst=$db->query("UPDATE `quotation` SET `quota_date` = '$data->date', `quota_no` = '$data->quotaNo', `quota_ref` = '$data->quotaRef', `company_name` = '$data->companyName', `branch_name` = '$data->branchName', `address` = '$data->branchAddress', `contact_person` = '$data->contactPerson',`person_id` = '$data->personId',`designation` = '$data->designation', `status` = '$status', `contact_by` = '$data->contactBy', `contact_by_userId` = '$data->contactByUserId', `contact_by_username` = '$data->contactByUsername', `contact_by_designation` = '$data->contactByDesignation', `contact_by_phone` = '$data->contactByPhone', `remarks` = '$data->remarks' , `state` = '$state', `doc_data`='$doc', `terms_condition`='$terms' WHERE `quotation`.`quota_id` = '$id'");
     if ($rst){
         $products=$db->query("SELECT * FROM `product` WHERE quotation_id='$id'");
         $productDeleteMap=array();
@@ -222,7 +240,7 @@ httpRESTMethod::put(function ($data){
         $rdt["message"]="Quotation is not updated!";
     }
     if ($hasEmptyPrice){
-        $rst=$db->query("UPDATE `quotation` SET `state` = 'Incomplete' WHERE `quotation`.`quota_id` = '$id'");
+        $rst=$db->query("UPDATE `quotation` SET `status` = 'Preparing', `state` = 'Incomplete' WHERE `quotation`.`quota_id` = '$id'");
         if ($rst){
             $rdt["state"]="Incomplete";
         }

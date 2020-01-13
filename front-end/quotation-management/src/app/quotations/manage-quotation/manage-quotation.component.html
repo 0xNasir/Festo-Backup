@@ -143,14 +143,12 @@
   <mat-card>
     <mat-card-content>
       <div class="float-left statusCtlBtn" style="float: left;" *ngIf="selectedQuotation && permission.qms.qms_status">
-        <div *ngIf="!isHandset">
-          <button mat-stroked-button [disabled]="!this.clickedDiv || selectedQuotation.status=='Preparing'" (click)="markAs('Preparing')">Mark as Preparing</button>
-          <button mat-stroked-button [disabled]="!this.clickedDiv || selectedQuotation.status=='Ready'" (click)="markAs('Ready')">Mark as Ready</button>
+        <div *ngIf="!isHandset && selectedQuotation.printCount!=0">
           <button mat-stroked-button [disabled]="!this.clickedDiv || selectedQuotation.status=='Win'" (click)="markAs('Win')">Mark as Win</button>
           <button mat-stroked-button [disabled]="!this.clickedDiv || selectedQuotation.status=='Loss'"(click)="markAs('Loss')">Mark as Loss</button>
           <button mat-stroked-button [disabled]="!this.clickedDiv || selectedQuotation.status=='Pending'" (click)="markAs('Pending')">Mark as Pending</button>
         </div>
-        <div *ngIf="isHandset">
+        <div *ngIf="isHandset&&selectedQuotation.printCount!=0">
           <button mat-button [disabled]="!this.clickedDiv" [matMenuTriggerFor]="statusAction" style="padding-bottom: 1px;border-bottom: 1px solid black;border-radius: 0px;">
             Mark as
             <div class="mat-select-arrow-wrapper">
@@ -158,8 +156,6 @@
             </div>
           </button>
           <mat-menu #statusAction="matMenu">
-            <button mat-menu-item (click)="markAs('Preparing')">Preparing</button>
-            <button mat-menu-item (click)="markAs('Ready')">Ready</button>
             <button mat-menu-item (click)="markAs('Win')">Win</button>
             <button mat-menu-item (click)="markAs('Loss')">Loss</button>
             <button mat-menu-item (click)="markAs('Pending')">Pending</button>
@@ -216,7 +212,7 @@
         </div>
       </div>
       <mat-spinner *ngIf="showSpinner"></mat-spinner>
-      <table mat-table [dataSource]="quotations" class="mat-elevation-z8 table-responsive" matSort *ngIf="!showSpinner">
+      <table mat-table [dataSource]="quotations" [class]="showSpinner?'hide':'mat-elevation-z8 table-responsive mat-table'" matSort>
 
         <ng-container matColumnDef="date">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Date</th>
@@ -259,7 +255,7 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr style="cursor:pointer;" mat-row (click)="selectRow(row)" [class]="clickedDiv==row.id?'mat-row ng-star-inserted selected':'mat-row ng-star-inserted'" *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
-      <mat-paginator [pageSizeOptions]="[25,50,100,150,200,500]" *ngIf="!showSpinner"></mat-paginator>
+      <mat-paginator [pageSizeOptions]="[25,50,100,150,200,500]" [class]="showSpinner?'hide':'mat-paginator'" showFirstLastButtons></mat-paginator>
     </mat-card-content>
   </mat-card>
 </div>

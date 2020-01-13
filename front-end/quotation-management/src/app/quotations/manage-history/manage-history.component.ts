@@ -1,12 +1,15 @@
 import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
 import {QuotationsService} from '../../services/quotations.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MatDialog, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {MatDialog} from '@angular/material';
 import {Location} from '@angular/common';
 import {AuthService} from '../../services/auth.service';
 import {History, Quotations} from '../../plain-object/quotations';
 import {Products} from '../../plain-object/products';
 import {ProductDialogComponent} from '../../dialog/product/product.dialog.component';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
 
 @Component({
   selector: 'app-manage-history',
@@ -17,12 +20,12 @@ export class ManageHistoryComponent implements OnInit {
   permission: any;
   public showSpinner = true;
   private id: string;
-  public quotationObject: Quotations;
+  public history: History[];
   quotaNo: string;
   historyArray: MatTableDataSource<History>;
   displayedColumns: string[] = ['id', 'update_date', 'delivery_date', 'status', 'product', 'cumulativePrice'];
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: false}) sort: MatSort;
   private isHandset: boolean;
 
   constructor(
@@ -44,9 +47,9 @@ export class ManageHistoryComponent implements OnInit {
       this.id = params.get('id');
       this.quotationService.getSingleQuotation(this.id).subscribe(data => {
         this.showSpinner = false;
-        this.quotationObject = data;
+        this.history = data;
         this.quotaNo = data.quotaNo;
-        this.historyArray = new MatTableDataSource(data.history);
+        this.historyArray = new MatTableDataSource<History>(data.history);
         this.historyArray.paginator = this.paginator;
         this.historyArray.sort = this.sort;
       });

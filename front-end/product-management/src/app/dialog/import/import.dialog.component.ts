@@ -26,8 +26,12 @@ export class ImportDialogComponent {
       header: true,
       skipEmptyLines: true,
       complete: (result, file) => {
-        console.log(result.data);
-        this.productService.importProduct(result.data).subscribe(dts => {
+        const day = file.name.substr(file.name.length - 6, 2);
+        const month = file.name.substr(file.name.length - 8, 2);
+        const year = file.name.substr(file.name.length - 12, 4);
+        const epochDate = new Date(month + ' ' + day + ', ' + year + ' 12:00:00');
+        result.Date = epochDate.getTime() / 1000.0;
+        this.productService.importProduct(result).subscribe(dts => {
           this.snackBar.open(dts.message, 'Close', {
             duration: 2000
           });
